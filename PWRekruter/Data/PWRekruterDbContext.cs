@@ -36,13 +36,19 @@ namespace PWRekruter.Data
 
             modelBuilder.Entity<Kandydat>()
                 .HasData(
-                    new Kandydat { Id = 1, Email = "kandydat 1", Haslo = "haslo" },
-                    new Kandydat { Id = 2, Email = "kandydat 2", Haslo = "haslo" });
+                    new Kandydat { Id = 1, Email = "kandydat1", Haslo = "haslo" },
+                    new Kandydat { Id = 2, Email = "kandydat2", Haslo = "haslo" },
+                    new Kandydat { Id = 3, Email = "kandydat3", Haslo = "haslo" },
+                    new Kandydat { Id = 4, Email = "kandydat4", Haslo = "haslo" },
+                    new Kandydat { Id = 5, Email = "kandydat5", Haslo = "haslo" });
 
             modelBuilder.Entity<Rekruter>()
                 .HasData(
-                    new Rekruter { Id = 3, Email = "rekruter 1", Haslo = "haslo" },
-                    new Rekruter { Id = 4, Email = "rekruter 2", Haslo = "haslo" });
+                    new Rekruter { Id = 6, Email = "rekruter1", Haslo = "haslo" },
+                    new Rekruter { Id = 7, Email = "rekruter2", Haslo = "haslo" },
+                    new Rekruter { Id = 8, Email = "rekruter3", Haslo = "haslo" },
+                    new Rekruter { Id = 9, Email = "rekruter4", Haslo = "haslo" },
+                    new Rekruter { Id = 10, Email = "rekruter5", Haslo = "haslo" });
         }
     }
 }

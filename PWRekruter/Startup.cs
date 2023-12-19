@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PWRekruter.Data;
+using PWRekruter.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +27,10 @@ namespace PWRekruter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+            services.AddSingleton<ILoginService, LoginService>();
+            
+
             services.AddControllersWithViews();
             services.AddDbContext<PWRekruterDbContext>(o => o.UseNpgsql(Configuration.GetConnectionString("PWRekruterDb")));
         }

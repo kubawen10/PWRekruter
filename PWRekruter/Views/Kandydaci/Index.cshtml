@@ -1,0 +1,12 @@
+﻿@model PWRekruter.Models.Kandydat
+
+@{
+    ViewData["Title"] = "Panel Kandydata";
+}
+
+<h1>Panel kandydata</h1>
+
+<a asp-action="Edit" asp-route-id="@Model.Id">Podstawowe dane kandydata</a> |
+<a asp-action="Details" asp-route-id="@Model.Id">Wyniki egzaminów</a> |
+<a asp-action="Index">Moje aplikacje</a>
+

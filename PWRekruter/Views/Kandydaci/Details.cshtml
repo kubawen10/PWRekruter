@@ -1,0 +1,102 @@
+﻿@model PWRekruter.Models.Kandydat
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Kandydat</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Imie)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Imie)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DrugieImie)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DrugieImie)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nazwisko)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nazwisko)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Pesel)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Pesel)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Plec)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Plec)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataUrodzenia)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataUrodzenia)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Panstwo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Panstwo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.KodPocztowy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.KodPocztowy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Miejscowosc)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Miejscowosc)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ulica)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ulica)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumerBudynku)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumerBudynku)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumerMieszkania)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumerMieszkania)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Haslo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Haslo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

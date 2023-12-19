@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 
 namespace PWRekruter.Models
 {
@@ -15,8 +16,10 @@ namespace PWRekruter.Models
         public string? DrugieImie { get; set; }
         public string? Nazwisko { get; set; }
         [Display(Name = "PESEL")]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "PESEL musi składać się z 11 cyfr.")]
         public string? Pesel { get; set; }
         [Display(Name = "Płeć")]
+        [EnumDataType(typeof(Plec))]
         public Plec? Plec { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Data urodzenia")]
@@ -24,7 +27,8 @@ namespace PWRekruter.Models
         public DateTime? DataUrodzenia { get; set; }
         [Display(Name = "Państwo")]
         public string? Panstwo { get; set; }
-        [Display(Name = "Kod pocztowy")]
+        [Display(Name = "Kod pocztowy", Prompt = "00-000")]
+        [RegularExpression(@"\d\d-\d\d\d", ErrorMessage = "Kod pocztowy powinien być w formacie 00-000")]
         public string? KodPocztowy { get; set; }
         [Display(Name = "Miejscowość")]
         public string? Miejscowosc { get; set; }

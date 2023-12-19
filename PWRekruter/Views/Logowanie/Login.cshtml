@@ -1,5 +1,4 @@
-﻿<!-- Display Kandydaci radio buttons -->
-<h2>Kandydaci:</h2>
+﻿<h2>Kandydaci:</h2>
 <form method="post" action="/Logowanie/Kandydat">
     @foreach (var kandydat in ViewData["Kandydaci"] as List<Kandydat>)
     {
@@ -12,7 +11,6 @@
     <input type="submit" value="Logowanie jako kandydat" />
 </form>
 
-<!-- Display Rekruterzy radio buttons -->
 <h2>Rekruterzy:</h2>
 <form method="post" action="/Logowanie/Rekruter">
     @foreach (var rekruter in ViewData["Rekruterzy"] as List<Rekruter>)

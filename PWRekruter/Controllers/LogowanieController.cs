@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PWRekruter.Data;
+using PWRekruter.Services;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace PWRekruter.Controllers
     public class LogowanieController : Controller
     {
         private readonly PWRekruterDbContext _context;
+        private readonly ILoginService _loginService;
 
-        public LogowanieController(PWRekruterDbContext context)
+        public LogowanieController(PWRekruterDbContext context, ILoginService loginService)
         {
             _context = context;
+            _loginService = loginService;
         }
 
         public IActionResult Login()
@@ -27,10 +30,7 @@ namespace PWRekruter.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Kandydat(int id)
         {
-            Debug.WriteLine($"Kandydat {id}");
-            Response.Cookies.Append("UserType", "kandydat");
-            Response.Cookies.Append("UserId", id.ToString());
-
+            _loginService.Login(id, UserType.Kandydat);
             return RedirectToAction("Index", "Home");
         }
 
@@ -38,18 +38,13 @@ namespace PWRekruter.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Rekruter(int id)
         {
-            Debug.WriteLine($"Rekruter {id}");
-            Response.Cookies.Append("UserType", "rekruter");
-            Response.Cookies.Append("UserId", id.ToString());
-
+            _loginService.Login(id, UserType.Rekruter);
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("UserType");
-            Response.Cookies.Delete("UserId");
-
+            _loginService.Logout();
             return RedirectToAction("Index", "Home");
         }
     }

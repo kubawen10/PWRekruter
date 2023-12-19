@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,12 +12,20 @@ namespace PWRekruter.Models
         public int Id { get; set; }
 
         public int NadawcaId { get; set; }
-        public Konto Nadawca {  get; set; }
+        public Konto Nadawca { get; set; }
 
         public ICollection<OdbiorcaWiadomosci> Odbiorcy { get; set; }
 
+
         [Required]
-        public string Tresc {  get; set; }
+        [Display(Name = "Tytuł")]
+        public string Tytul { get; set; }
+
+        [Required]
+        [Display(Name = "Treść")]
+        public string Tresc { get; set; }
+        [DisplayFormat(DataFormatString = "{0:HH:mm dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Data {  get; set; }
     }
 
     [Table("OdbiorcyWiadomosci")]
