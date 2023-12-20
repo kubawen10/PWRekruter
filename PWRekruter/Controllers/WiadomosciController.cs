@@ -28,7 +28,7 @@ namespace PWRekruter.Controllers
         public async Task<IActionResult> Index()
         {
             // wiadomosci do obecnego uzytkownika
-            var wiadomosci = _context.OdbiorcyWiadomosci.Where(ow => ow.OdbiorcaId == _loginService.GetUserId()).Select(w => w.Wiadomosc);
+            var wiadomosci = _context.OdbiorcyWiadomosci.Include(w => w.Wiadomosc.Nadawca).Where(ow => ow.OdbiorcaId == _loginService.GetUserId()).Select(w => w.Wiadomosc);
 
             return View(await wiadomosci.ToListAsync());
         }
@@ -70,7 +70,7 @@ namespace PWRekruter.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Kierunek,Wydzial,Imie,Nazwisko,Maile,Zweryfikowani,Tytul,Tresc")] WiadomoscViewModel wiadomoscView)
+        public async Task<IActionResult> Create([Bind("Kierunek,Wydzial,Imie,Nazwisko,Maile,Zakwalifikowani,Tytul,Tresc")] WiadomoscViewModel wiadomoscView)
         {
             // TODO wryfikacja kryteriow
             // dla rekrutera wysylanie masowe

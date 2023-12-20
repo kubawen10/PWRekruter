@@ -2,15 +2,12 @@
 
 @{
     ViewData["Title"] = "Edit";
+    ViewData["Sciezka"] = "Panel kandydata / Podstawowe dane kandydata";
 }
-
-<h1>Panel kandydata / Podstawowe dane kandydata</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row justify-content-around">
+        <div class="col-4">
             <div class="form-group">
                 <label asp-for="Imie" class="control-label"></label>
                 <input asp-for="Imie" class="form-control" />
@@ -42,6 +39,8 @@
                 <input asp-for="DataUrodzenia" class="form-control"/>
                 <span asp-validation-for="DataUrodzenia" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-4">
             <div class="form-group">
                 <label asp-for="Panstwo" class="control-label"></label>
                 <input asp-for="Panstwo" class="form-control" />
@@ -75,17 +74,24 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Email" />
             <input type="hidden" asp-for="Haslo"/>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="row justify-content-around mt-4">
+        <div class="col-md-5">
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-secondary ml-auto" asp-action="Index">Anuluj</a>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="d-flex justify-content-start">
+                <div class="form-group">
+                    <input type="submit" value="Zapisz" class="btn btn-primary mr-auto" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

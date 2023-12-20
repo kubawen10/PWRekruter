@@ -1,45 +1,29 @@
 ﻿@model IEnumerable<PWRekruter.Models.Wiadomosc>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Wiadomości";
+    ViewData["Sciezka"] = "Wiadomości";
 }
 
-<h1>Index</h1>
+<div class="clearfix my-2">
+    <a class="btn btn-primary float-right" asp-action="Create">Utwórz wiadomość</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nadawca)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tytul)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Data)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nadawca.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tytul)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            </td>
-        </tr>
+<div class="row font-weight-bold no-gutters">
+    <div class="col-4 pl-1">@Html.DisplayNameFor(model => model.Nadawca)</div>
+    <div class="col-6">@Html.DisplayNameFor(model => model.Tytul)</div>
+    <div class="col-2">@Html.DisplayNameFor(model => model.Data)</div>
+</div>
+
+@* TODO komunikat brak wiadomosci *@
+@foreach (var item in Model)
+{
+    <a style="text-decoration: none; color: inherit;" asp-action="Details" asp-route-id="@item.Id">
+        <div class="row py-2 mb-1 rounded no-gutters" style="background-color: rgb(215, 215, 214);">
+            <div class="col-4 text-truncate pl-1">@Html.DisplayFor(modelItem => item.Nadawca.Email)</div>
+            <div class="col-6 text-truncate">@Html.DisplayFor(modelItem => item.Tytul)</div>
+            <div class="col-2 text-truncate">@Html.DisplayFor(modelItem => item.Data)</div>
+        </div>
+    </a>
 }
-    </tbody>
-</table>
+
