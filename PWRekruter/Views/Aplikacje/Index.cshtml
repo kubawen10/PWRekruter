@@ -1,0 +1,81 @@
+﻿@model IEnumerable<PWRekruter.Models.Aplikacja>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@if (Model.Count() == 0)
+{
+    <h1>Szukaj aplikacji</h1>
+}
+else
+{
+    <h1>Wyszukane aplikacje</h1>
+}
+<form method="get" action="@Url.Action("Index")">
+<div style="display: inline-block;">
+    <label for="id">Id aplikacji:</label> <br />
+    <input type="number" id="id" name="id" class="form-field" />
+</div>
+<div style="display: inline-block;">
+    <label for="kandydat">Imię i nazwisko kandydata:</label> <br />
+    <input type="text" id="kandydat" name="kandydat" class="form-field" />
+</div>
+
+    <div style="display: inline-block;">
+        <label for="kierunek">Kierunek:</label> <br />
+        <select id="kierunek" name="kierunek" class="form-field">
+            <option value="">Wybierz kierunek</option>
+            @foreach (var kierunek in ViewBag.Kierunki)
+            {
+                <option value="@kierunek.Id">@kierunek.Nazwa</option>
+            }
+        </select>
+    </div>
+
+<div style="display: inline-block;">
+    <label for="wydzial">Wydział:</label> <br />
+    <select id="wydzial" name="wydzial" class="form-field">
+        <option value="">Wybierz wydział</option>
+        @foreach (var wydzial in ViewBag.Wydzialy)
+        {
+            <option value="@wydzial.Symbol">@wydzial.Nazwa</option>
+        }
+    </select>
+</div>
+    <div style="display: inline-block">
+    <label for="status">Status:</label><br />
+    <select id="status" name="status" class="form-field">
+        <option value="">Wybierz status</option>
+        <option value="@StatusAplikacji.Zlozona">Złożona</option>
+        <option value="@StatusAplikacji.Oceniona">Oceniona</option>
+    </select>
+    </div>
+    <button type="submit" class="button">Szukaj</button>
+</form>
+
+
+<hr />
+
+<table class="table">
+
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kandydat.Imie) @Html.DisplayFor(modelItem => item.Kandydat.DrugieImie)
+                @Html.DisplayFor(modelItem => item.Kandydat.Nazwisko)
+            </td>
+           <td>
+               @Html.DisplayNameFor(modelItem => item.Status): @Html.DisplayFor(modelItem => item.Status)
+           </td>
+           <td>
+               <a asp-action="Details" class="button" asp-route-id="@item.Id">Przeglądaj</a>
+           </td>
+
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<PWRekruter.Models.Kierunek>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<head>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+
+<h1 class="header">Oferta studiów</h1>
+<div id="search">
+<form method="get" action="@Url.Action("Index")">
+    <div style="display: inline-block;">
+        <label for="nazwa">Kierunek:</label> <br />
+        <input type="text" id="nazwa" name="nazwa" placeholder="Wyszukaj kierunek..." class="form-field"/>
+    </div>
+
+    <div style="display: inline-block;">
+        <label for="wydzial">Wydział:</label> <br />
+        <select id="wydzial" name="wydzial" class="form-field">
+            <option value="">Wybierz wydział</option>
+            @foreach (var wydzial in ViewBag.Wydzialy)
+            {
+                <option value="@wydzial.Symbol">@wydzial.Nazwa</option>
+            }
+        </select>
+    </div>
+    <div style="display: inline-block">
+        <label for="stopien">Stopień:</label><br />
+        <select id="stopien" name="stopien" class="form-field">
+            <option value="">Wybierz stopień</option>
+            <option value="@StopienStudiow.Istopien">I stopień</option>
+            <option value="@StopienStudiow.IIstopien">II stopień</option>
+        </select>
+    </div>
+    <div style="display: inline-block">
+        <label for="forma">Forma:</label><br />
+        <select id="forma" name="forma" class="form-field">
+            <option value="">Wybierz formę</option>
+            @foreach (var formaStudiow in Enum.GetValues(typeof(FormaStudiow)))
+            {
+                <option value="@formaStudiow">@formaStudiow.ToString().ToLower()</option>
+            }
+        </select>
+    </div>
+    <div style="display: inline-block;">
+        <label for="dyscyplina">Dyscyplina:</label> <br />
+        <select id="dyscyplina" name="dyscyplina" class="form-field">
+            <option value="">Wybierz dyscyplinę</option>
+            @foreach (var d in ViewBag.Dyscypliny)
+            {
+                <option value="@d">@d</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="button">Szukaj</button>
+</form>
+</div>
+<hr />
+
+
+<table class="table">
+   
+    <tbody>
+        @foreach (var item in Model) {
+                <tr>
+                        <td>
+                            <strong>@Html.DisplayFor(modelItem => item.Nazwa)</strong><br />
+                            <small>@Html.DisplayFor(modelItem=>item.Stopien), @Html.DisplayFor(modelItem=>item.Forma)</small>
+                        </td>
+           
+                    <td class="right-align">
+         
+                        <a asp-action="Details" class="button" asp-route-id="@item.Id">Przeglądaj</a> 
+               
+                    </td>
+                </tr>
+        }
+        @if(Model.Count()==0)
+        {
+            <p>Brak wyników spełniających kryteria wyszukiwania</p>
+        }
+    </tbody>
+</table>

@@ -37,5 +37,6 @@ namespace PWRekruter.Models
         public string? NumerBudynku { get; set; }
         [Display(Name = "Numer mieszkania")]
         public string? NumerMieszkania { get; set; }
+        public Aplikacja? Aplikacja { get; set; }
     }
 }
