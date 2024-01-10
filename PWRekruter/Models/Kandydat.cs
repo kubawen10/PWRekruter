@@ -40,5 +40,6 @@ namespace PWRekruter.Models
         public string? NumerMieszkania { get; set; }
 
         public ICollection<WynikEgzaminu> WynikiEgzaminow {  get; set; }
+        public Aplikacja? Aplikacja { get; set; }
     }
 }

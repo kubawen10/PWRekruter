@@ -1,0 +1,99 @@
+﻿@model PWRekruter.Models.Kierunek
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<head>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+
+<div id="details-container">
+
+<div>
+    <h2 class="header">@Html.DisplayFor(model => model.Nazwa)</h2>
+</div>
+
+<div class="details-block" id="description">
+    <h5>@Html.DisplayNameFor(model=>model.Opis)</h5>
+        <p>@Html.Raw(Model.Opis)</p>
+</div>
+
+<div class="details-block" id="details">
+    <div class="detail-label">@Html.DisplayNameFor(model=>model.Stopien)</div>
+    <p>@Html.DisplayFor(model=>model.Stopien)</p>
+    <div class="detail-label">@Html.DisplayNameFor(model=>model.Forma)</div>
+    <p>@Html.DisplayFor(model=>model.Forma)</p>
+    <div class="detail-label">@Html.DisplayNameFor(model=>model.CzasTrwania)</div>
+    @{
+        var semestr = Model.CzasTrwania switch
+        {
+            1 => "semestr",
+            2 or 3 or 4 => "semestry",
+            _ => "semestrów"
+        };
+    }
+    <p>@Html.DisplayFor(model=>model.CzasTrwania) @semestr</p>  
+    <div class="detail-label">@Html.DisplayNameFor(model=>model.DyscyplinaNaukowa)</div>
+    <p>@Html.DisplayFor(model=>model.DyscyplinaNaukowa)</p>
+    <div class="detail-label">@Html.DisplayNameFor(model=>model.LiczbaMiejsc)</div>
+    <p>@Html.DisplayFor(model=>model.LiczbaMiejsc)</p>
+    @if (Model.Czesne != null)
+    {
+        <div class="detail-label">@Html.DisplayNameFor(model=>model.Czesne)</div>
+        <p>@Html.DisplayFor(model=>model.Czesne)€/semestr</p>
+    }
+    @if (Model.CzesneDlaCudzoziemcow != null)
+    {
+        <div class="detail-label">@Html.DisplayNameFor(model=>model.CzesneDlaCudzoziemcow)</div>
+        <p>@Html.DisplayFor(model=>model.CzesneDlaCudzoziemcow)€/semestr</p>
+    }
+    
+
+</div>
+
+<div class="details-block" id="files-block">
+    <h5 style="padding-top: 10px;">Program i plan studiów</h5>
+    <br />
+    @if (Model.IdProgramuStudiow.HasValue)
+    {
+        <a asp-action="PobierzProgramStudiow" asp-route-id="@Model.IdProgramuStudiow.Value">
+            <img id="file-icon" src="~/image/file_icon.png"/>
+            Program studiów
+        </a>
+        <a asp-action="PobierzPlanStudiow" asp-route-id="@Model.IdProgramuStudiow.Value" style="margin-left: 330px;">
+            <img id="file-icon" src="~/image/file_icon.png" />
+            Plan studiów
+        </a>
+    }
+    else {
+        <p>Brak danych</p>
+    }
+</div>
+@if (Model.HistoryczneProgi.Count > 0)
+{
+    <h5 class="header">Progi punktowe</h5>
+    <table id="points-table">
+        <thead>
+            <tr>
+                <th>rok</th>
+                <th>wysokość progu</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prog in Model.HistoryczneProgi)
+            {
+                <tr>
+                    <td>@prog.Rok</td>
+                    <td>@prog.Wartosc</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+<div>
+    <a asp-action="Index" class="button">Powrót</a>
+</div>
+</div>
