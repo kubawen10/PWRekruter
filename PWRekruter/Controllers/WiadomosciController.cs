@@ -57,7 +57,7 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Wiadomosci/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             if (_loginService.GetUserType() == UserType.Rekruter)
             {
@@ -67,25 +67,46 @@ namespace PWRekruter.Controllers
                 ViewBag.UserType = "Kandydat";
             }
 
-            return View();
+			var wydzialy = await _context.Wydzialy.ToListAsync();
+			ViewBag.Wydzialy = wydzialy;
+
+            var kierunki = await _context.Kierunki.ToListAsync();
+            ViewBag.Kierunki = kierunki;
+
+			return View();
         }
 
-        // TODO cale filtrowanie kryteriow
         private async Task<List<int>> GetIdOdbiorcyWiadomosciList(WiadomoscViewModel wiadomoscViewModel)
         {
             // user==Kandydat => mail do pierwszego rekrutera
             if (_loginService.GetUserType() == UserType.Kandydat)
             {
-                var rekruter = await _context.Rekruterzy.FirstOrDefaultAsync();
-                List<int> mailList = new()
-                {
-                    rekruter.Id
-                };
-                return mailList;
+                var rekruterId = await _context.Rekruterzy.Select(r=>r.Id).FirstOrDefaultAsync();
+                return new List<int> { rekruterId };
+            }
+            string[] maile = new string[0];
+            if (!string.IsNullOrEmpty(wiadomoscViewModel.Maile))
+            {
+                maile = wiadomoscViewModel.Maile.Split(" ");
             }
 
-            var maile = wiadomoscViewModel.Maile.Split(" ");
-            return await _context.Konta.Where(k => maile.Contains(k.Email)).Select(k=>k.Id).ToListAsync();
+            // TODO brakuje weryfikacji czy zakwalifikowany ale nie wiem czy bedziemy to implementowac
+            // https://media.tenor.com/vkYnJE2Jdj8AAAAM/oh-my-god.gif
+            var ids = await _context.Preferencje
+                .Include(p => p.Aplikacja)
+                    .ThenInclude(a => a.Kandydat)
+                .Include(p => p.Kierunek)
+                    .ThenInclude(k => k.Wydzial)
+                .Where(p =>
+                    (string.IsNullOrEmpty(wiadomoscViewModel.Wydzial) || p.Kierunek.Wydzial.Symbol == wiadomoscViewModel.Wydzial)
+                    && (string.IsNullOrEmpty(wiadomoscViewModel.Kierunek) || p.Kierunek.Skrot == wiadomoscViewModel.Kierunek)
+                    && (string.IsNullOrEmpty(wiadomoscViewModel.Maile) || maile.Contains(p.Aplikacja.Kandydat.Email))
+                    && (string.IsNullOrEmpty(wiadomoscViewModel.Imie) || p.Aplikacja.Kandydat.Imie == wiadomoscViewModel.Imie)
+                    && (string.IsNullOrEmpty(wiadomoscViewModel.Nazwisko) || p.Aplikacja.Kandydat.Nazwisko == wiadomoscViewModel.Nazwisko))
+                .Select(p => p.Aplikacja.Kandydat.Id)
+                .ToListAsync();
+
+            return ids;
         }
 
         // POST: Wiadomosci/Create
@@ -97,8 +118,17 @@ namespace PWRekruter.Controllers
         {
             if (ModelState.IsValid)
             {
-                // TODO wryfikacja kryteriow
                 List<int> ids = await GetIdOdbiorcyWiadomosciList(wiadomoscView);
+
+                if(ids.Count == 0)
+                {
+                    ViewBag.BrakKandydatow = true;
+                    ViewBag.UserType = "Rekruter";
+                    ViewBag.Wydzialy = await _context.Wydzialy.ToListAsync();
+                    ViewBag.Kierunki = await _context.Kierunki.ToListAsync();
+
+                    return View(wiadomoscView);
+                }
 
                 Wiadomosc wiadomosc = new Wiadomosc
                 {

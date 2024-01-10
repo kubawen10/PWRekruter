@@ -20,9 +20,16 @@
             <div class="row">
                 <div class="col-5">
                     <div class="form-group">
-                        <label asp-for="Kierunek" class="control-label mb-1"></label>
-                        <input asp-for="Kierunek" class="form-control" />
-                        <span asp-validation-for="Kierunek" class="text-danger"></span>
+                        @{
+                            var kierunekSelectListItems = new List<SelectListItem>();
+                            @foreach (var kierunek in ViewBag.Kierunki)
+                            {
+                                kierunekSelectListItems.Add(new SelectListItem() { Text = @kierunek.Nazwa, Value = @kierunek.Skrot });
+                            }
+                            kierunekSelectListItems.Insert(0, new SelectListItem() { Text = "", Value = "" });
+                        }
+                        @Html.LabelFor(x=>x.Kierunek, "Kierunek", new {@class="mb-1"})
+                        @Html.DropDownListFor(x=>x.Kierunek, kierunekSelectListItems, new {@class="form-control mb-1"})
                     </div>
                 </div>
                 <div class="col-5">
@@ -42,9 +49,16 @@
             <div class="row">
                 <div class="col-5">
                     <div class="form-group">
-                        <label asp-for="Wydzial" class="control-label mb-1"></label>
-                        <input asp-for="Wydzial" class="form-control" />
-                        <span asp-validation-for="Wydzial" class="text-danger"></span>
+                        @{
+                            var wydzialSelectListItems = new List<SelectListItem>();
+                            @foreach (var wydzial in ViewBag.Wydzialy)
+                            {
+                                wydzialSelectListItems.Add(new SelectListItem() { Text = @wydzial.Nazwa, Value = @wydzial.Symbol });
+                            }
+                            wydzialSelectListItems.Insert(0, new SelectListItem() { Text = "", Value = "" });
+                        }
+                        @Html.LabelFor(x=>x.Wydzial, "Wydział", new {@class="mb-1"})
+                        @Html.DropDownListFor(x=>x.Wydzial, wydzialSelectListItems, new {@class="form-control mb-1"})
                     </div>
                 </div>
                 <div class="col-7">
@@ -87,6 +101,13 @@
             </div>
         </div>
     </div>
+
+    @if (ViewBag.BrakKandydatow != null)
+    {
+        <div class="px-3 text-center">
+            <span class="text-danger">Brak kandydatów spełniających podane kryteria</span>
+        </div>
+    }
 
     <div class="row justify-content-around mt-4">
         <div class="col-md-5">
