@@ -26,6 +26,8 @@ namespace PWRekruter.Controllers
             return View();
         }
 
+
+        // to do po nie zaznaczeniu który rekruter/kantydat i kliknieciu zaloguj wywala 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Kandydat(int id)

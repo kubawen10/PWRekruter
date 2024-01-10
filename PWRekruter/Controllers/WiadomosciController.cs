@@ -28,7 +28,10 @@ namespace PWRekruter.Controllers
         public async Task<IActionResult> Index()
         {
             // wiadomosci do obecnego uzytkownika
-            var wiadomosci = _context.OdbiorcyWiadomosci.Include(w => w.Wiadomosc.Nadawca).Where(ow => ow.OdbiorcaId == _loginService.GetUserId()).Select(w => w.Wiadomosc);
+            var wiadomosci = _context.OdbiorcyWiadomosci
+                .Include(w => w.Wiadomosc.Nadawca)
+                .Where(ow => ow.OdbiorcaId == _loginService.GetUserId())
+                .Select(w => w.Wiadomosc);
 
             return View(await wiadomosci.ToListAsync());
         }
@@ -44,6 +47,7 @@ namespace PWRekruter.Controllers
             var wiadomosc = await _context.Wiadomosci
                 .Include(w => w.Nadawca)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (wiadomosc == null)
             {
                 return NotFound();
@@ -55,14 +59,33 @@ namespace PWRekruter.Controllers
         // GET: Wiadomosci/Create
         public IActionResult Create()
         {
+            if (_loginService.GetUserType() == UserType.Rekruter)
+            {
+                ViewBag.UserType = "Rekruter";
+            } else
+            {
+                ViewBag.UserType = "Kandydat";
+            }
+
             return View();
         }
 
         // TODO cale filtrowanie kryteriow
-        private List<int> GetIdOdbiorcyWiadomosciList(WiadomoscViewModel wiadomoscViewModel)
+        private async Task<List<int>> GetIdOdbiorcyWiadomosciList(WiadomoscViewModel wiadomoscViewModel)
         {
+            // user==Kandydat => mail do pierwszego rekrutera
+            if (_loginService.GetUserType() == UserType.Kandydat)
+            {
+                var rekruter = await _context.Rekruterzy.FirstOrDefaultAsync();
+                List<int> mailList = new()
+                {
+                    rekruter.Id
+                };
+                return mailList;
+            }
+
             var maile = wiadomoscViewModel.Maile.Split(" ");
-            return _context.Konta.Where(k => maile.Contains(k.Email)).Select(k=>k.Id).ToList();
+            return await _context.Konta.Where(k => maile.Contains(k.Email)).Select(k=>k.Id).ToListAsync();
         }
 
         // POST: Wiadomosci/Create
@@ -72,12 +95,10 @@ namespace PWRekruter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Kierunek,Wydzial,Imie,Nazwisko,Maile,Zakwalifikowani,Tytul,Tresc")] WiadomoscViewModel wiadomoscView)
         {
-            // TODO wryfikacja kryteriow
-            // dla rekrutera wysylanie masowe
-            // dla kandydata wysylanie do rekruterow
             if (ModelState.IsValid)
             {
-                List<int> ids = GetIdOdbiorcyWiadomosciList(wiadomoscView);
+                // TODO wryfikacja kryteriow
+                List<int> ids = await GetIdOdbiorcyWiadomosciList(wiadomoscView);
 
                 Wiadomosc wiadomosc = new Wiadomosc
                 {

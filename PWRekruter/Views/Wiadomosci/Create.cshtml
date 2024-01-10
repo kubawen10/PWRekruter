@@ -2,60 +2,71 @@
 
 @{
     ViewData["Title"] = "Create";
-    ViewData["Sciezka"] = "Wiadomości / Wiadomość do kandydatów";
+    @if (ViewBag.UserType == "Rekruter")
+    {
+        ViewData["Sciezka"] = "Wiadomości / Wiadomość do kandydatów";
+    } else
+    {
+        ViewData["Sciezka"] = "Wiadomości / Wiadomość do rekrutera";
+    }
+
 }
 
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="receiver-wrapper px-3 py-2">
-        <div class="row">
-            <div class="col-5">
-                <div class="form-group">
-                    <label asp-for="Kierunek" class="control-label mb-1"></label>
-                    <input asp-for="Kierunek" class="form-control" />
-                    <span asp-validation-for="Kierunek" class="text-danger"></span>
+    @if (ViewBag.UserType == "Rekruter")
+    {
+        <div class="receiver-wrapper px-3 py-2">
+            <div class="row">
+                <div class="col-5">
+                    <div class="form-group">
+                        <label asp-for="Kierunek" class="control-label mb-1"></label>
+                        <input asp-for="Kierunek" class="form-control" />
+                        <span asp-validation-for="Kierunek" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="form-group">
+                        <label asp-for="Imie" class="control-label mb-1"></label>
+                        <input asp-for="Imie" class="form-control" />
+                        <span asp-validation-for="Imie" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-2" style="padding-top: 2.2rem">
+                    <div class="form-check">
+                        <input asp-for="Zakwalifikowani" type="checkbox" class="form-check-input" />
+                        <label asp-for="Zakwalifikowani" class="form-check-label">Zakwalifikowani</label>
+                    </div>
                 </div>
             </div>
-            <div class="col-5">
-                <div class="form-group">
-                    <label asp-for="Imie" class="control-label mb-1"></label>
-                    <input asp-for="Imie" class="form-control" />
-                    <span asp-validation-for="Imie" class="text-danger"></span>
+            <div class="row">
+                <div class="col-5">
+                    <div class="form-group">
+                        <label asp-for="Wydzial" class="control-label mb-1"></label>
+                        <input asp-for="Wydzial" class="form-control" />
+                        <span asp-validation-for="Wydzial" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-7">
+                    <div class="form-group">
+                        <label asp-for="Nazwisko" class="control-label mb-1"></label>
+                        <input asp-for="Nazwisko" class="form-control" type="text" />
+                        <span asp-validation-for="Nazwisko" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-            <div class="col-2" style="padding-top: 2.2rem">
-                <div class="form-check">
-                    <input asp-for="Zakwalifikowani" type="checkbox" class="form-check-input" />
-                    <label asp-for="Zakwalifikowani" class="form-check-label">Zakwalifikowani</label>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label asp-for="Maile" class="control-label mb-11"></label>
+                        <input asp-for="Maile" class="form-control" />
+                        <span asp-validation-for="Maile" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
+
         </div>
-        <div class="row">
-            <div class="col-5">
-                <div class="form-group">
-                    <label asp-for="Wydzial" class="control-label mb-1"></label>
-                    <input asp-for="Wydzial" class="form-control" />
-                    <span asp-validation-for="Wydzial" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-7">
-                <div class="form-group">
-                    <label asp-for="Nazwisko" class="control-label mb-1"></label>
-                    <input asp-for="Nazwisko" class="form-control" type="text"/>
-                    <span asp-validation-for="Nazwisko" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="form-group">
-                    <label asp-for="Maile" class="control-label mb-11"></label>
-                    <input asp-for="Maile" class="form-control" />
-                    <span asp-validation-for="Maile" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-    </div>
+    }
     <div class="p-3">
         <div class="row">
             <div class="col-12">
@@ -77,14 +88,21 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+    <div class="row justify-content-around mt-4">
+        <div class="col-md-5">
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-secondary ml-auto" asp-action="Index">Anuluj</a>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="d-flex justify-content-start">
+                <div class="form-group">
+                    <input type="submit" value="Wyślij" class="btn btn-primary mr-auto" />
+                </div>
+            </div>
+        </div>
     </div>
 </form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

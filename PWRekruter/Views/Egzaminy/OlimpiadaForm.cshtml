@@ -1,0 +1,48 @@
+﻿﻿@using PWRekruter.Enums
+@model IList<PWRekruter.Models.WynikOlimpiady>
+
+@using (Html.BeginForm("EditOlimpiada", "Egzaminy", FormMethod.Post))
+{
+	@for (var i = 0; i < Model.Count; i++)
+	{
+		@Html.HiddenFor(model => Model[i].Id)
+		@Html.HiddenFor(model => Model[i].KandydatId)
+		@Html.HiddenFor(model => Model[i].TypWynikuEgzaminu)
+		@Html.HiddenFor(model => Model[i].Olimpiada)
+		<div class="row rounded dark-background-color mb-4 mx-5">
+			<div class="col-7 align-self-center">
+				@Model[i].Olimpiada.GetEnumLabel()
+			</div>
+			<div class="col-5">
+				@{
+					var selectedValue = Model[i].TytulOlimpijczyka.HasValue
+					? ((int)Model[i].TytulOlimpijczyka).ToString() : "";
+
+					var tytulOlimpijczykaList = Enum.GetValues(typeof(TytulOlimpijczyka))
+					.Cast<TytulOlimpijczyka>()
+					.Select(enu => new SelectListItem() { Text = enu.ToString(), Value = ((int)enu).ToString(), Selected = ((int)enu).ToString() == selectedValue })
+					.ToList();
+					tytulOlimpijczykaList.Insert(0, new SelectListItem() { Text = "", Value = "" });
+				}
+				@Html.LabelFor(x=>x[i].TytulOlimpijczyka, "Uzyskany tytuł", new {@class="mb-1"})
+				@Html.DropDownListFor(x => x[i].TytulOlimpijczyka, tytulOlimpijczykaList, new {@class="form-control mb-1"})
+
+			</div>
+		</div>
+	}
+
+	<div class="row justify-content-around mt-4">
+		<div class="col-md-5">
+			<div class="d-flex justify-content-end">
+				<a class="btn btn-secondary ml-auto" asp-action="Index" asp-controller="Kandydaci">Anuluj</a>
+			</div>
+		</div>
+		<div class="col-md-5">
+			<div class="d-flex justify-content-start">
+				<div class="form-group">
+					<input type="submit" value="Zapisz" class="btn btn-primary mr-auto" />
+				</div>
+			</div>
+		</div>
+	</div>
+}

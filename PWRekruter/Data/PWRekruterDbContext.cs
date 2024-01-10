@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PWRekruter.Enums;
 using PWRekruter.Models;
 
 namespace PWRekruter.Data
@@ -12,6 +13,10 @@ namespace PWRekruter.Data
         public DbSet<Rekruter> Rekruterzy { get; set; }
         public DbSet<Wiadomosc> Wiadomosci { get; set; }
         public DbSet<OdbiorcaWiadomosci> OdbiorcyWiadomosci { get; set; }
+        public DbSet<WynikEgzaminu> WynikiEgzaminow {  get; set; }
+        public DbSet<WynikOlimpiady> WynikiOlimpiady { get; set; }
+        public DbSet<WynikMaturyOKE> WynikiMaturyOKE { get; set; }
+        public DbSet<WynikPrzedmiotowy> WynikiPrzedmiotowe { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +38,20 @@ namespace PWRekruter.Data
                 .WithMany(k => k.NadaneWiadomosci)
                 .HasForeignKey(w => w.NadawcaId);
 
+            modelBuilder.Entity<WynikEgzaminu>()
+                .HasOne(w => w.Kandydat)
+                .WithMany(k => k.WynikiEgzaminow)
+                .HasForeignKey(w => w.KandydatId);
+
+            modelBuilder.Entity<WynikPrzedmiotowy>()
+                .HasOne(wp => wp.WynikMaturyOKE)
+                .WithMany(w => w.WynikiPrzedmiotowe)
+                .HasForeignKey(wp => wp.WynikMaturyOKEId);
+
+            modelBuilder.Entity<WynikEgzaminu>()
+                .HasDiscriminator(w=>w.TypWynikuEgzaminu)
+                .HasValue<WynikMaturyOKE>(TypWynikuEgzaminu.MaturaOKE)
+                .HasValue<WynikOlimpiady>(TypWynikuEgzaminu.Olimpiada);
 
             modelBuilder.Entity<Kandydat>()
                 .HasData(
