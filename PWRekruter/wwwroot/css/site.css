@@ -82,10 +82,91 @@ nav {
 
 .outer-container {
     border-radius: 15px;
-    height: calc(100% - 70px);
+    min-height: 90vh;
 }
 
 .receiver-wrapper {
     border-radius: 10px;
     background-color: #e8e8e8;
 }
+
+.dark-background-color {
+    background-color: #e8e8e8;
+}
+
+.button {
+    display: inline-block;
+    padding: 8px 8px; 
+    background-color: #888; 
+    color: #fff;
+    text-decoration: none; 
+    border: 1px solid #666;
+    border-radius: 4px; 
+}
+.right-align {
+    text-align: right;
+}
+.form-field {
+    height: 40px;
+}
+.details-block {
+    border: solid black;
+    background-color:gainsboro;
+    padding: 16px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    
+}
+#description {
+    display: inline-block;
+    width: 600px;
+    vertical-align: top;
+    text-align: justify;
+    margin-right: 30px;
+}
+#details {
+    display: inline-block;
+    width: 350px;
+    vertical-align: top;
+    text-align: left; 
+}
+#files-block {
+    margin: 0 auto;
+    width: 900px;
+}
+#file-icon {
+    width: 30px;
+}
+.detail-label{
+    font-weight: 600;
+}
+.header {
+    padding-top: 20px;
+}
+#points-table td, #points-table th {
+    background-color: whitesmoke;
+    border: 2px solid black;
+    text-align: center;
+    height: 30px;
+}
+#points-table th{
+    background-color: silver;
+    font-weight: 600;
+}
+#points-table {
+    margin: 0 auto;
+    width: 300px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border-collapse: collapse;
+    border-radius: 10px;
+}
+
+#details-container {
+    text-align: center;
+}
+
+#kandydat {
+    width: 220px;
+}
+

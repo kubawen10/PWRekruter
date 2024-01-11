@@ -13,7 +13,7 @@ namespace PWRekruter.ViewModels
         public string? Imie {  get; set; }
         public string? Nazwisko { get; set; }
         public string? Maile {  get; set; }
-        public Boolean Zakwalifikowani { get; set; }
+        public bool Zakwalifikowani { get; set; }
 
         [Required(ErrorMessage = "Podaj tytuł wiadomości")]
         [Display(Name = "Tytuł")]

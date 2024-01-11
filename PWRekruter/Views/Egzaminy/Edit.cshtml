@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Sciezka"] = "Panel kandydata / Wyniki egzaminów";
+}
+
+<div class="row justify-content-center mb-4">
+    <div class="form-group col-8">
+        <label for="typWynikuEgzaminuDropdown" class="mb-1">Rodzaj egzaminu</label>
+        <select class="form-control" id="typWynikuEgzaminuDropdown">
+            @foreach (var typWynikuEgzaminu in ViewBag.TypWynikuEgzaminuList)
+            {
+                <option value="@typWynikuEgzaminu.val">@typWynikuEgzaminu.text</option>
+            }
+        </select>
+    </div>
+</div>
+
+
+
+<div id="formContainer">
+    <!-- Placeholder for articles list -->
+</div>
+
+@section scripts
+    {
+    <script>
+        document.getElementById("typWynikuEgzaminuDropdown").addEventListener("change", function () {
+            var id = this.value;
+            if (id) {
+                fetch("/Egzaminy/GetEgzaminForm/" + id)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("formContainer").innerHTML = data;
+                    });
+            } else {
+                document.getElementById("formContainer").innerHTML = "";
+            }
+        });
+
+        var dropdown = document.getElementById("typWynikuEgzaminuDropdown");
+        var event = new Event("change");
+        dropdown.dispatchEvent(event);
+    </script>
+}

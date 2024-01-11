@@ -14,7 +14,6 @@ namespace PWRekruter.Controllers
 
         public IActionResult Index()
         {
-            Debug.WriteLine(_loginService.GetUserType());
             if (_loginService.GetUserType() == UserType.Kandydat)
             {
                 return RedirectToAction("Index", "Kandydaci");

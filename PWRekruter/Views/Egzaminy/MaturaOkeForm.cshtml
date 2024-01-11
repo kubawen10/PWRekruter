@@ -1,0 +1,45 @@
+﻿﻿@using PWRekruter.Enums
+@model IList<PWRekruter.Models.WynikPrzedmiotowy>
+
+@using (Html.BeginForm("EditMaturaOke", "Egzaminy", FormMethod.Post))
+{
+	@for (var i = 0; i < Model.Count; i+=2)
+	{
+		<div class="row rounded dark-background-color mb-4 mx-5">
+			<div class="col-4 align-self-center">
+				@Model[i].TypPrzedmiotu.GetEnumLabel()
+			</div>
+			<div class="col-4">
+				@Html.HiddenFor(model => Model[i].Id)
+				@Html.HiddenFor(model => Model[i].TypPrzedmiotu)
+				@Html.HiddenFor(model => Model[i].PoziomPrzedmiotu)
+				@Html.HiddenFor(model => Model[i].WynikMaturyOKEId)
+				@Html.LabelFor(x => x[i], @Model[i].PoziomPrzedmiotu.GetEnumLabel(), new {@class="mb-1"})
+				@Html.TextBoxFor(m => m[i].Wynik, new { type = "number", min=0, step=1, max=100, @class="form-control mb-1"})
+			</div>
+			<div class="col-4">
+				@Html.HiddenFor(model => Model[i+1].Id)
+				@Html.HiddenFor(model => Model[i+1].TypPrzedmiotu)
+				@Html.HiddenFor(model => Model[i+1].PoziomPrzedmiotu)
+				@Html.HiddenFor(model => Model[i+1].WynikMaturyOKEId)
+				@Html.LabelFor(x => x[i+1], @Model[i+1].PoziomPrzedmiotu.GetEnumLabel(), new {@class="mb-1"})
+				@Html.TextBoxFor(m => m[i+1].Wynik, new { type = "number", min=0, step=1, max=100, @class="form-control mb-1"})
+			</div>
+		</div>
+	}
+
+	<div class="row justify-content-around mt-4">
+		<div class="col-md-5">
+			<div class="d-flex justify-content-end">
+				<a class="btn btn-secondary ml-auto" asp-action="Index" asp-controller="Kandydaci">Anuluj</a>
+			</div>
+		</div>
+		<div class="col-md-5">
+			<div class="d-flex justify-content-start">
+				<div class="form-group">
+					<input type="submit" value="Zapisz" class="btn btn-primary mr-auto" />
+				</div>
+			</div>
+		</div>
+	</div>
+}

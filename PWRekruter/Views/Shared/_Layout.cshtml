@@ -18,6 +18,9 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex">
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Kierunki" asp-action="Index">Kierunki</a>
+                        </li>
                         @if (Context.Request.Cookies["UserType"] != null)
                         {
                             <li class="nav-item">
@@ -39,11 +42,18 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Logowanie" asp-action="Login">Utwórz konto</a>
                             </li>
                         }
+                        @if (Context.Request.Cookies["UserType"]=="Rekruter")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Aplikacje" asp-action="Index">Aplikacje</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    @* TODO wypelnienie calego ekranu + scroll nie wiem jak to zrobic*@
     <div class="container bg-light outer-container px-4">
         <main role="main" class="pb-3">
             @if (ViewData["Sciezka"] != null)
