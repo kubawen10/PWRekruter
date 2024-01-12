@@ -58,6 +58,8 @@ namespace PWRekruter.Controllers
 
             var aplikacja = await _context.Aplikacje
                 .Include(a => a.Kandydat)
+                .Include(a => a.Preferencje)
+                .ThenInclude(p => p.Kierunek)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (aplikacja == null)
             {

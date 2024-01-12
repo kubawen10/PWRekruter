@@ -161,8 +161,41 @@ nav {
 #details-container {
     text-align: center;
 }
-
+#doc-icon {
+    width: 30px;
+}
 #kandydat {
     width: 220px;
 }
+.app-header {
+    text-align: center;
+    padding-top: 20px;
+}
+#candidate-icon{
+    width: 60px;
+}
+#app-details {
+    margin-top: 30px;
+    text-align: center;
+}
+#docs-table td{
+    padding: 10px;
+    border: 1px solid grey;
+    width: 200px;
+}
+#pref-table{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#pref-table td, th {
+    padding: 10px;
+    background-color: whitesmoke;
+    border: 2px solid black;
+}
+#pref-table th {
+    background-color: silver;
+    font-weight: 600;
+}
+
+
 
