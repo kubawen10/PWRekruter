@@ -186,6 +186,7 @@ nav {
 #pref-table{
     margin-top: 20px;
     margin-bottom: 20px;
+    
 }
 #pref-table td, th {
     padding: 10px;
@@ -195,6 +196,9 @@ nav {
 #pref-table th {
     background-color: silver;
     font-weight: 600;
+}
+#pref-table-container {
+    margin-left: 150px;
 }
 
 
