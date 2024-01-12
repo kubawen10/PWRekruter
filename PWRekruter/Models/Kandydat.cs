@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
@@ -37,6 +38,8 @@ namespace PWRekruter.Models
         public string? NumerBudynku { get; set; }
         [Display(Name = "Numer mieszkania")]
         public string? NumerMieszkania { get; set; }
+
+        public ICollection<WynikEgzaminu> WynikiEgzaminow {  get; set; }
         public Aplikacja? Aplikacja { get; set; }
     }
 }

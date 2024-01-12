@@ -9,21 +9,31 @@
     <a class="btn btn-primary float-right" asp-action="Create">Utwórz wiadomość</a>
 </div>
 
-<div class="row font-weight-bold no-gutters">
-    <div class="col-4 pl-1">@Html.DisplayNameFor(model => model.Nadawca)</div>
-    <div class="col-6">@Html.DisplayNameFor(model => model.Tytul)</div>
-    <div class="col-2">@Html.DisplayNameFor(model => model.Data)</div>
-</div>
-
-@* TODO komunikat brak wiadomosci *@
-@foreach (var item in Model)
+@if (@Model.Count() == 0)
 {
-    <a style="text-decoration: none; color: inherit;" asp-action="Details" asp-route-id="@item.Id">
-        <div class="row py-2 mb-1 rounded no-gutters" style="background-color: rgb(215, 215, 214);">
-            <div class="col-4 text-truncate pl-1">@Html.DisplayFor(modelItem => item.Nadawca.Email)</div>
-            <div class="col-6 text-truncate">@Html.DisplayFor(modelItem => item.Tytul)</div>
-            <div class="col-2 text-truncate">@Html.DisplayFor(modelItem => item.Data)</div>
-        </div>
-    </a>
+    <div class="text-center">
+        <h3>Brak wiadomości</h3>
+    </div>
+} else
+{
+    <div class="row font-weight-bold no-gutters">
+        <div class="col-4 pl-1">@Html.DisplayNameFor(model => model.Nadawca)</div>
+        <div class="col-6">@Html.DisplayNameFor(model => model.Tytul)</div>
+        <div class="col-2">@Html.DisplayNameFor(model => model.Data)</div>
+    </div>
+
+    @foreach (var item in Model)
+    {
+        <a style="text-decoration: none; color: inherit;" asp-action="Details" asp-route-id="@item.Id">
+            <div class="row py-2 mb-1 rounded no-gutters" style="background-color: rgb(215, 215, 214);">
+                <div class="col-4 text-truncate pl-1">@Html.DisplayFor(modelItem => item.Nadawca.Email)</div>
+                <div class="col-6 text-truncate">@Html.DisplayFor(modelItem => item.Tytul)</div>
+                <div class="col-2 text-truncate">@Html.DisplayFor(modelItem => item.Data)</div>
+            </div>
+        </a>
+    }
 }
+
+
+
 
