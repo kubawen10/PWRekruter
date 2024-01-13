@@ -12,10 +12,10 @@
     <hr /> 
 </div>
 <div id="app-details">
-    <div style="display: inline-block;">
+    <div style="display: inline-block; margin-top: 40px;">
         <img id="candidate-icon" src="~/image/person.png" />
     </div>
-    <div style="display: inline-block;">
+    <div style="display: inline-block; margin-top: 40px;">
         <h4>@Html.DisplayFor(model=>model.Kandydat.Imie) 
             @if (!string.IsNullOrEmpty(Model.Kandydat.DrugieImie))
             {
@@ -24,16 +24,21 @@
             @Html.DisplayFor(model=>model.Kandydat.Nazwisko)
         </h4>
     </div>
-    <div style="display: inline-block; margin-left: 300px;">
+    <div style="display: inline-block; margin-left: 300px; vertical-align: top;">
         <h5>Załączone dokumenty</h5>
         <table id="docs-table">
+
+            @foreach(var dok in Model.Dokumenty)
+            {
+                <tr><td>
+                <a asp-action="DownloadDocument" asp-route-id="@dok.Id">
+                    <img id="file-icon" src="~/image/file_icon.png" />
+                            @Html.DisplayFor(model => dok.Typ)
+                </a>
+                </td></tr>
+            }
             
-             <tr>
-                 <td><img src="~/image/file_icon.png" id="doc-icon"/>  Podanie</td>
-             </tr>
-            <tr>
-                <td><img src="~/image/file_icon.png" id="doc-icon" />  Podanie</td>
-            </tr>
+             
             
         </table>
     </div>

@@ -22,5 +22,6 @@ namespace PWRekruter.Models
         public int IdKandydata { get; set; }
         public Kandydat Kandydat { get; set; }
         public ICollection<Preferencja> Preferencje { get; set; }
+        public ICollection<Dokument> Dokumenty { get; set; }
     }
 }

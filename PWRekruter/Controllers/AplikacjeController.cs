@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +15,12 @@ namespace PWRekruter.Controllers
     public class AplikacjeController : Controller
     {
         private readonly PWRekruterDbContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public AplikacjeController(PWRekruterDbContext context)
+        public AplikacjeController(PWRekruterDbContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Aplikacje
@@ -58,6 +62,7 @@ namespace PWRekruter.Controllers
 
             var aplikacja = await _context.Aplikacje
                 .Include(a => a.Kandydat)
+                .Include(a => a.Dokumenty)
                 .Include(a => a.Preferencje)
                 .ThenInclude(p => p.Kierunek)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -67,6 +72,28 @@ namespace PWRekruter.Controllers
             }
 
             return View(aplikacja);
+        }
+
+        public async Task<IActionResult> DownloadDocument(long id)
+        {
+            var dokument = await _context.Dokumenty.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (dokument == null)
+            {
+                return NotFound();
+            }
+
+            return DownloadFile(dokument.SciezkaPliku);
+        }
+
+        private PhysicalFileResult DownloadFile(string path)
+        {
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, path);
+
+            var contentType = "APPLICATION/OCTET-STREAM";
+            var fileName = Path.GetFileName(filePath);
+
+            return PhysicalFile(filePath, contentType, fileName);
         }
 
         // GET: Aplikacje/Create

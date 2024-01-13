@@ -25,6 +25,7 @@ namespace PWRekruter.Data
         public DbSet<ProgPunktowy> ProgiPunktowe {  get; set; }
         public DbSet<Aplikacja> Aplikacje { get; set; }
         public DbSet<Preferencja> Preferencje { get; set; }
+        public DbSet<Dokument> Dokumenty { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OdbiorcaWiadomosci>()
@@ -166,8 +167,31 @@ namespace PWRekruter.Data
             modelBuilder.Entity<Preferencja>()
                 .HasData(
                 new Preferencja { Id=1, IdAplikacji=1, IdKierunku=1, Priorytet=1, WartoscWskaznika = 477.7 });
-           //TODO: ograniczenie ze jedna aplikacja moze miec max 6 pozycji w liscie preferencji
-
+            //TODO: ograniczenie ze jedna aplikacja moze miec max 6 pozycji w liscie preferencji
+            modelBuilder.Entity<Dokument>().HasKey(d => d.Id);
+            modelBuilder.Entity<Aplikacja>()
+                .HasMany(a => a.Dokumenty)
+                .WithOne(d => d.Aplikacja)
+                .HasForeignKey(d => d.IdAplikacji);
+            modelBuilder.Entity<Dokument>()
+                .HasData(
+                    new Dokument
+                    {
+                        Id = 1,
+                        SciezkaPliku = "dokumenty/dok1.pdf",
+                        DataUzyskania = DateTime.Today,
+                        Typ=TypDokumentu.Podanie,
+                        IdAplikacji = 1
+                    },
+                    new Dokument
+                    {
+                        Id = 2,
+                        SciezkaPliku = "dokumenty/dok2.pdf",
+                        DataUzyskania = DateTime.Today,
+                        Typ = TypDokumentu.SwiadectwoDojrzalosci,
+                        IdAplikacji = 1
+                    }
+                );
 
         }
     }

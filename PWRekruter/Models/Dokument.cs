@@ -20,9 +20,12 @@ namespace PWRekruter.Models
 
     public class Dokument
     {
+        public long Id { get; set; }
         public string SciezkaPliku {  get; set; }
         public DateTime DataUzyskania { get; set; }
         public TypDokumentu Typ {  get; set; }
+        public long IdAplikacji { get; set; }
+        public Aplikacja Aplikacja { get; set; }
     }
 
    
