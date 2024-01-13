@@ -1,38 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using PWRekruter.Enums;
 
 namespace PWRekruter.Models
 {
-    public enum StopienStudiow
-    {
-        [Display(Name = "I stopień")]
-        Istopien,
-        [Display(Name = "II stopień")]
-        IIstopien
-    }
-    public enum TrybStudiow
-    {
-        Dzienne,
-        Zaoczne
-    }
-    public enum FormaStudiow
-    {
-        [Display(Name ="stacjonarne")]
-        Stacjonarne,
-        [Display(Name = "niestacjonarne")]
-        Niestacjonarne
-    }
-    public enum ProfilKierunku
-    {
-        Ogolnoakademicki,
-        Praktyczny
-    }
-    public enum Jezyk
-    {
-        Polski,
-        Angielski
-    }
+    
 
     [Table("Kierunki")]
     public class Kierunek

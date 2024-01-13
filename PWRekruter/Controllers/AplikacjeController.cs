@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PWRekruter.Data;
+using PWRekruter.Enums;
 using PWRekruter.Models;
 
 namespace PWRekruter.Controllers
