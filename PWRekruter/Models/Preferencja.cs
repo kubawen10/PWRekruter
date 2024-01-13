@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PWRekruter.Models
 {
@@ -11,6 +12,7 @@ namespace PWRekruter.Models
     {
         public long Id { get; set; }
         public int Priorytet { get; set; }
+        [Display(Name ="Wskaźnik")]
         public double WartoscWskaznika { get; set; }
         public WynikAplikacji? Wynik {  get; set; }
         public long IdKierunku { get; set; }

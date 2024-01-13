@@ -11,7 +11,7 @@ namespace PWRekruter.Data
         public PWRekruterDbContext(DbContextOptions<PWRekruterDbContext> options) : base(options) { }
 
         public DbSet<Konto> Konta { get; set; }
-        public DbSet<Kandydat> Kandydaci { get; set; }
+        public virtual DbSet<Kandydat> Kandydaci { get; set; }
         public DbSet<Rekruter> Rekruterzy { get; set; }
         public DbSet<Wiadomosc> Wiadomosci { get; set; }
         public DbSet<OdbiorcaWiadomosci> OdbiorcyWiadomosci { get; set; }
@@ -27,8 +27,8 @@ namespace PWRekruter.Data
         public DbSet<Aplikacja> Aplikacje { get; set; }
         public DbSet<Preferencja> Preferencje { get; set; }
         public DbSet<TuraRekrutacji> TuryRekrutacji { get; set; }
-        public DbSet<Specjalizacja> Specjalizacje { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<Dokument> Dokumenty { get; set; }
+        public DbSet<Specjalizacja> Specjalizacje { get; set; }        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OdbiorcaWiadomosci>()
                 .HasKey(ow => new {ow.WiadomoscId, ow.OdbiorcaId});
@@ -202,8 +202,32 @@ namespace PWRekruter.Data
                 new Preferencja { Id=1, IdAplikacji=1, IdKierunku=1, Priorytet=1, WartoscWskaznika = 477.7 },
                 new Preferencja { Id=2, IdAplikacji=1, IdKierunku=2, Priorytet=2, WartoscWskaznika = 480.1, IdWybranejSpecjalizacji=1 }
                 );
-           //TODO: ograniczenie ze jedna aplikacja moze miec max 6 pozycji w liscie preferencji
-
+               
+            //TODO: ograniczenie ze jedna aplikacja moze miec max 6 pozycji w liscie preferencji
+            modelBuilder.Entity<Dokument>().HasKey(d => d.Id);
+            modelBuilder.Entity<Aplikacja>()
+                .HasMany(a => a.Dokumenty)
+                .WithOne(d => d.Aplikacja)
+                .HasForeignKey(d => d.IdAplikacji);
+            modelBuilder.Entity<Dokument>()
+                .HasData(
+                    new Dokument
+                    {
+                        Id = 1,
+                        SciezkaPliku = "dokumenty/dok1.pdf",
+                        DataUzyskania = DateTime.Today,
+                        Typ=TypDokumentu.Podanie,
+                        IdAplikacji = 1
+                    },
+                    new Dokument
+                    {
+                        Id = 2,
+                        SciezkaPliku = "dokumenty/dok2.pdf",
+                        DataUzyskania = DateTime.Today,
+                        Typ = TypDokumentu.SwiadectwoDojrzalosci,
+                        IdAplikacji = 1
+                    }
+                );
 
         }
     }

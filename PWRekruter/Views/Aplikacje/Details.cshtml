@@ -1,0 +1,106 @@
+﻿@model PWRekruter.Models.Aplikacja
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+
+<div>
+    <h3 class="app-header">Aplikacja @Html.DisplayFor(model => model.Id)</h3>
+    <h6 class="app-header">@Html.DisplayNameFor(model => model.Status): @Html.DisplayFor(model => model.Status)</h6>
+    <hr /> 
+</div>
+<div id="app-details">
+    <div style="display: inline-block; margin-top: 40px;">
+        <img id="candidate-icon" src="~/image/person.png" />
+    </div>
+    <div style="display: inline-block; margin-top: 40px;">
+        <h4>@Html.DisplayFor(model=>model.Kandydat.Imie) 
+            @if (!string.IsNullOrEmpty(Model.Kandydat.DrugieImie))
+            {
+                @Html.DisplayFor(model=>model.Kandydat.DrugieImie) 
+            }
+            @Html.DisplayFor(model=>model.Kandydat.Nazwisko)
+        </h4>
+    </div>
+    <div style="display: inline-block; margin-left: 300px; vertical-align: top;">
+        <h5>Załączone dokumenty</h5>
+        <table id="docs-table">
+
+            @foreach(var dok in Model.Dokumenty)
+            {
+                <tr><td>
+                <a asp-action="DownloadDocument" asp-route-id="@dok.Id">
+                    <img id="file-icon" src="~/image/file_icon.png" />
+                            @Html.DisplayFor(model => dok.Typ)
+                </a>
+                </td></tr>
+            }
+            
+             
+            
+        </table>
+    </div>
+</div>
+<div id="pref-table-container">
+    <h5>Lista preferencji</h5>
+    <table id="pref-table">
+        <thead>
+            <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Preferencje.First().Kierunek)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Preferencje.First().WartoscWskaznika)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Preferencje.First().Wynik)
+            </th>
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var pref in Model.Preferencje)
+            {
+                <tr>
+                    <td>@pref.Priorytet. @pref.Kierunek.Nazwa</td>
+                    <td>@pref.WartoscWskaznika</td>
+                    <td style="width: 100px">@pref.Wynik</td>
+                    <td><a href="#" class="button" onclick="showModal(@pref.Id)">Zarządzaj</a></td>
+                </tr>
+            }
+        </tbody>
+        
+    </table>
+
+    <div>
+        <a class="button" asp-action="Index">Powrót</a>
+    </div>
+</div>
+
+<div id="myModal" class="modal" data-prefid="">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modalContent">
+            <h5>Zarządzaj</h5>
+            <div>
+                <label class="modal-element">
+                    <input type="radio" name="option" value="akceptuj" /> Akceptuj   
+                </label>
+                <label class="modal-element">
+                    <input type="radio" name="option" value="odrzuc" /> Odrzuć   
+                </label>
+                <label class="modal-element">
+                    <input type="radio" name="option" value="usun" /> Usuń wynik
+                </label>
+            </div>
+            <div class="modal-element">
+                <a href="#" class="button" onclick="closeModal()">
+                    Anuluj</a>
+                <a href="#" class="button" onclick="confirmAction()">Zatwierdź</a>
+            </div>
+        </div>
+    </div>
+</div>
+
