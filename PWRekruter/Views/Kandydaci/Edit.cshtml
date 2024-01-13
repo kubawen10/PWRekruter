@@ -1,4 +1,4 @@
-﻿@model PWRekruter.Models.Kandydat
+﻿@model PWRekruter.ViewModels.KandydatViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -33,6 +33,7 @@
                 <select asp-for="Plec" class="custom-select" asp-items="Html.GetEnumSelectList<Plec>()">
                     <option value="">Wybierz</option>
                 </select>
+                <span asp-validation-for="Plec" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DataUrodzenia" class="control-label"></label>
@@ -71,9 +72,6 @@
                 <input asp-for="NumerMieszkania" class="form-control" />
                 <span asp-validation-for="NumerMieszkania" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="Email" />
-            <input type="hidden" asp-for="Haslo"/>
         </div>
     </div>
 
