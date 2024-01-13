@@ -1,0 +1,59 @@
+﻿@model IEnumerable<PWRekruter.Models.Kierunek>
+@using PWRekruter.Enums
+@{
+    ViewData["Title"] = "Index";
+    ViewData["Sciezka"] = "Panel rekrutera / Wydziały / " + ViewBag.Symbol + " / Kierunki";
+}
+
+
+<div class="d-flex d-row justify-content-between mb-3">
+        <form class="d-flex d-row" asp-action="IndexAdm">
+            <input type="hidden" name="symbol" value="@ViewBag.Symbol" />
+            <input class="form-control" type="text" name="SearchString" placeholder="Szukaj" />
+            <button class="btn btn-outline-secondary ml-3" type="submit">Szukaj</button>
+        </form>
+    <a class="btn btn-outline-secondary" asp-action="Create">Dodaj <i class="bi bi-plus"></i></a>
+    
+</div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Skrót
+                </th>
+                <th>
+                    Nazwa
+                </th>
+                <th>
+                    Stopień
+                </th>
+                <th>
+                    Forma
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Skrot)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Nazwa)
+                    </td>
+                    <td class="align-middle">
+                        @item.Stopien.GetEnumLabel()
+                    </td>
+                    <td class="align-middle">
+                        @item.Forma.GetEnumLabel()
+                    </td>
+                    <td class="align-middle">
+                        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Wybierz</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

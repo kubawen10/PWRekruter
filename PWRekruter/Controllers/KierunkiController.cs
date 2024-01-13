@@ -208,5 +208,21 @@ namespace PWRekruter.Controllers
         {
             return _context.Kierunki.Any(e => e.Id == id);
         }
+        public async Task<IActionResult> IndexAdm(string Symbol, string? SearchString)
+        {
+            ViewBag.Symbol = Symbol;
+            var kierunkiQuery = _context.Kierunki.AsQueryable();
+
+            kierunkiQuery = kierunkiQuery.Where(k => k.SymbolWydzialu == Symbol);
+
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                kierunkiQuery = kierunkiQuery.Where(k => k.Nazwa.ToLower().Contains(SearchString.ToLower()));
+            }
+
+            var kierunkiList = await kierunkiQuery.ToListAsync();
+            return View(kierunkiList);
+        }
+
     }
 }
