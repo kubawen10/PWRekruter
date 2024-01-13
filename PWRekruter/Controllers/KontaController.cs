@@ -19,7 +19,7 @@ namespace PWRekruter.Controllers
                 return RedirectToAction("Index", "Kandydaci");
             } else // TODO redirect dla rekrutera
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Rekruterzy");
             }
         }
     }
