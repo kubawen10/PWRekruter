@@ -12,7 +12,7 @@ namespace PWRekruter.Models
     public class Aplikacja
     {
         public long Id { get; set; }
-        public StatusAplikacji Status {  get; set; }
+        public StatusAplikacji Status { get; set; }
         public bool Oplacona { get; set; }
         public DateTime DataZlozenia { get; set; }
         public int IdKandydata { get; set; }
@@ -21,4 +21,5 @@ namespace PWRekruter.Models
         public long IdTuryRekrutacji { get; set; }
         public TuraRekrutacji TuraRekrutacji { get; set; }
         public ICollection<Dokument> Dokumenty { get; set; }
+    }
 }
