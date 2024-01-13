@@ -10,7 +10,7 @@ namespace PWRekruter.Data
         public PWRekruterDbContext(DbContextOptions<PWRekruterDbContext> options) : base(options) { }
 
         public DbSet<Konto> Konta { get; set; }
-        public DbSet<Kandydat> Kandydaci { get; set; }
+        public virtual DbSet<Kandydat> Kandydaci { get; set; }
         public DbSet<Rekruter> Rekruterzy { get; set; }
         public DbSet<Wiadomosc> Wiadomosci { get; set; }
         public DbSet<OdbiorcaWiadomosci> OdbiorcyWiadomosci { get; set; }

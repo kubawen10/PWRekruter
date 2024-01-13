@@ -31,7 +31,12 @@ namespace PWRekruter.Controllers
         public async Task<IActionResult> Index()
         {
             int kandydatId = _loginService.GetUserId();
-            return View(await _context.Kandydaci.FirstOrDefaultAsync(k => k.Id == kandydatId));
+            var kandydat = await _context.Kandydaci.FindAsync(kandydatId);
+            if (kandydat == null)
+            {
+                return NotFound();
+            }
+            return View(kandydat);
         }
 
         // GET: Kandydaci/Details/5
