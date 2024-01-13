@@ -97,6 +97,44 @@ namespace PWRekruter.Controllers
             return PhysicalFile(filePath, contentType, fileName);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangeAppResult(int id, string option)
+        {
+            var pref = await _context.Preferencje
+                .FirstOrDefaultAsync(a => a.Id==id);
+            if (pref != null)
+            {
+                if (option == "usun" && pref.Wynik == null)
+                {
+                    return Content("Wybrana pozycja nie posiada wyniku");
+                }
+                else if ((option == "akceptuj" && pref.Wynik==WynikAplikacji.Zakwalfikowano)||
+                    (option == "odrzuc" && pref.Wynik==WynikAplikacji.Odrzucono))
+                {
+                    return Content("Pozycja posiada już wybrany wynik");
+                }
+                else
+                {
+                    switch (option)
+                    {
+                        case "usun":
+                            pref.Wynik=null;
+                            break;
+                        case "akceptuj":
+                            pref.Wynik = WynikAplikacji.Zakwalfikowano;
+                            break;
+                        case "odrzuc":
+                            pref.Wynik = WynikAplikacji.Odrzucono;
+                            break;
+                    }
+                    _context.SaveChanges();
+                    return Content("Zapisano zmiany");
+                }
+            }
+            
+            return RedirectToAction("Details");
+        }
+
         // GET: Aplikacje/Create
         public IActionResult Create()
         {

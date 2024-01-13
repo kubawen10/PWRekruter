@@ -67,7 +67,7 @@
                     <td>@pref.Priorytet. @pref.Kierunek.Nazwa</td>
                     <td>@pref.WartoscWskaznika</td>
                     <td style="width: 100px">@pref.Wynik</td>
-                    <td><a class="button">Zarządzaj</a></td>
+                    <td><a href="#" class="button" onclick="showModal(@pref.Id)">Zarządzaj</a></td>
                 </tr>
             }
         </tbody>
@@ -78,3 +78,29 @@
         <a class="button" asp-action="Index">Powrót</a>
     </div>
 </div>
+
+<div id="myModal" class="modal" data-prefid="">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modalContent">
+            <h5>Zarządzaj</h5>
+            <div>
+                <label class="modal-element">
+                    <input type="radio" name="option" value="akceptuj" /> Akceptuj   
+                </label>
+                <label class="modal-element">
+                    <input type="radio" name="option" value="odrzuc" /> Odrzuć   
+                </label>
+                <label class="modal-element">
+                    <input type="radio" name="option" value="usun" /> Usuń wynik
+                </label>
+            </div>
+            <div class="modal-element">
+                <a href="#" class="button" onclick="closeModal()">
+                    Anuluj</a>
+                <a href="#" class="button" onclick="confirmAction()">Zatwierdź</a>
+            </div>
+        </div>
+    </div>
+</div>
+
