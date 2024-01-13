@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using System.Diagnostics.CodeAnalysis;
 
 namespace PWRekruter.Models
 {
@@ -20,5 +20,6 @@ namespace PWRekruter.Models
         public ICollection<Preferencja> Preferencje { get; set; }
         public long IdTuryRekrutacji { get; set; }
         public TuraRekrutacji TuraRekrutacji { get; set; }
+        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using PWRekruter.Enums;
 
 namespace PWRekruter.Models
@@ -41,6 +42,7 @@ namespace PWRekruter.Models
         public ProgramStudiow? ProgramStudiow { get; set; }
         public List<ProgPunktowy> HistoryczneProgi {  get; set; }
 
-
+        [AllowNull]
+        public ICollection<Specjalizacja> Specjalizacje { get; set; }
     }
 }

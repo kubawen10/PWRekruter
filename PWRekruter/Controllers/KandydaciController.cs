@@ -175,9 +175,14 @@ namespace PWRekruter.Controllers
                                    .Where(pref => pref.IdAplikacji == aplikacja.Id)
                                    .OrderBy(pref => pref.Priorytet)
                                    .ToListAsync();
+            
             foreach (var preferencja in aplikacja.Preferencje)
             {
                 preferencja.Kierunek = await _context.Kierunki.FirstOrDefaultAsync(k => k.Id == preferencja.IdKierunku);
+                if (preferencja.IdWybranejSpecjalizacji != null)
+                {
+                    preferencja.WybranaSpecjalizacja = await _context.Specjalizacje.FirstOrDefaultAsync(s => s.Id == preferencja.IdWybranejSpecjalizacji);
+                }
             }
             return View(aplikacja);
             
