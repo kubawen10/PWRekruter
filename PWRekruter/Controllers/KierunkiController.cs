@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PWRekruter.Data;
 using PWRekruter.Models;
+using PWRekruter.Enums;
 
 namespace PWRekruter.Controllers
 {

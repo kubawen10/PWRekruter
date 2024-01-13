@@ -165,8 +165,113 @@ nav {
 #details-container {
     text-align: center;
 }
-
+#doc-icon {
+    width: 30px;
+}
 #kandydat {
     width: 220px;
 }
+.app-header {
+    text-align: center;
+    padding-top: 20px;
+}
+#candidate-icon{
+    width: 60px;
+}
+#app-details {
+    margin-top: 30px;
+    text-align: center;
+}
+#docs-table td{
+    padding: 10px;
+    border: 1px solid grey;
+    width: 200px;
+}
+#pref-table{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+}
+#pref-table td, th {
+    padding: 10px;
+    background-color: whitesmoke;
+    border: 2px solid black;
+}
+#pref-table th {
+    background-color: silver;
+    font-weight: 600;
+}
+#pref-table-container {
+    margin-left: 150px;
+}
 
+
+
+.application-not-found {
+    max-width: 50%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    
+}
+
+.space-btw {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+}
+
+.hiddenRow {
+    padding: 0 !important;
+}
+.dragging {
+    opacity: 0.5;
+}
+.chevron:hover {
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    text-align:center;
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+
+}
+
+.close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.modal-element {
+    margin-top: 20px;
+    margin-right: 10px;
+}

@@ -25,6 +25,8 @@ namespace PWRekruter.Data
         public DbSet<ProgPunktowy> ProgiPunktowe {  get; set; }
         public DbSet<Aplikacja> Aplikacje { get; set; }
         public DbSet<Preferencja> Preferencje { get; set; }
+        public DbSet<TuraRekrutacji> TuryRekrutacji { get; set; }
+        public DbSet<Dokument> Dokumenty { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OdbiorcaWiadomosci>()
@@ -99,6 +101,25 @@ namespace PWRekruter.Data
                         Profil = ProfilKierunku.Ogolnoakademicki,
                         SymbolWydzialu = "W4",
                         IdProgramuStudiow = 1
+                    },
+                    new Kierunek
+                    {
+                        Id = 2,
+                        Nazwa = "Inżynieria zarządzania",
+                        Skrot = "IZ",
+                        Stopien = StopienStudiow.Istopien,
+                        Forma = FormaStudiow.Stacjonarne,
+                        Tryb = TrybStudiow.Dzienne,
+                        CzasTrwania = 7,
+                        Czesne = 0.0,
+                        CzesneDlaCudzoziemcow = 1250.0,
+                        JezykWykladowy = Jezyk.Polski,
+                        DyscyplinaNaukowa = "Nauki o zarządzaniu i jakości",
+                        LiczbaMiejsc = 120,
+                        OplataRekrutacyjna = 80,
+                        Opis = "Współczesna branża IT zgłasza ogromne zapotrzebowanie na menadżerów, którzy posiadają zarówno twardą wiedzę techniczną, jak i znają metody oraz narzędzia podejmowania odpowiednich decyzji w zarządzaniu. Inżynieria Zarządzania na naszym Wydziale jest idealną odpowiedzią na taką potrzebę. Nasi Absolwenci są poszukiwanymi na rynku specjalistami, którzy potrafią łączyć wiedzę i miękkie umiejętności menadżerskie z twardymi kompetencjami inżynierskimi.\r\n\r\nKształtowanie kompetencji biznesowych i inżynierskich\r\n\r\nNasz absolwent potrafi formułować i rozwiązywać zadania o charakterze inżynierskim, szczególnie tych dotyczących procesów biznesowych, procesów innowacyjnych, projektów, zastosowania IT w biznesie. Umie dostrzegać ich aspekty systemowe oraz posługiwać się właściwymi normami i standardami, także pozatechnicznymi – ekonomicznymi, prawnymi, ekologicznymi, psychologicznymi, zawodowymi i moralnymi\r\n\r\nKształtowanie kompetencji analitycznych\r\n\r\nNasz absolwent rozumie procesy i zjawiska materialne, finansowe i społeczne zachodzące w organizacjach i ich otoczeniu. Potrafi myśleć analitycznie i wykorzystuje w tym celu podstawowy aparat matematyczny i statystyczny oraz umiejętności logicznego myślenia i wnioskowania.\r\n\r\nKształtowanie kompetencji społecznych\r\n\r\nNasz absolwent potrafi w współdziałać i pracować w grupowych i zespołowych formach organizacji pracy (przyjmując w nich różne role). Potrafi organizować pracę małych zespołów i nimi kierować. Jest przygotowany do odpowiedzialnego pełnienia ról zawodowych z uwzględnieniem zmieniających się potrzeb społecznych\r\n\r\nKształtowanie kompetencji informatyczno-technologicznych\r\n\r\nNasz absolwent ma uporządkowaną, podbudowaną teoretycznie wiedzę ogólną dotyczącą narzędzi i technologii implementacji SIZ, modelowania procesów biznesowych, inżynierii zarządzania projektami, a także obejmującą kluczowe zagadnienia w zakresie zastosowania IT w biznesie. Zna obowiązujące trendy w IT i potrafi niektóre z nich zastosować.",
+                        Profil = ProfilKierunku.Ogolnoakademicki,
+                        SymbolWydzialu = "W8"
                     }
                 );
 
@@ -139,10 +160,11 @@ namespace PWRekruter.Data
 
             modelBuilder.Entity<Aplikacja>()
                 .HasKey(a => a.Id);
+                
             modelBuilder.Entity<Kandydat>()
                 .HasOne(k => k.Aplikacja)
                 .WithOne(a => a.Kandydat)
-                .HasForeignKey<Aplikacja>(a => a.IdKandydata)
+                .HasForeignKey<Aplikacja>(a => a.IdKandydata) 
                 .IsRequired(false);
 
             modelBuilder.Entity<Preferencja>()
@@ -159,15 +181,47 @@ namespace PWRekruter.Data
                 .WithMany()
                 .HasForeignKey(p => p.IdKierunku);
 
+            modelBuilder.Entity<TuraRekrutacji>()
+                .HasData(
+                new TuraRekrutacji { Id = 1, TerminSkladaniaAplikacji = DateTime.Now, TerminWnoszeniaOplatRekrutacyjnych = DateTime.Now },
+                new TuraRekrutacji { Id = 2, TerminSkladaniaAplikacji = DateTime.Parse("2024-05-08"), TerminWnoszeniaOplatRekrutacyjnych = DateTime.Parse("2024-05-08") }
+                );
+
             modelBuilder.Entity<Aplikacja>()
                 .HasData(
-                new Aplikacja { Id=1, DataZlozenia=DateTime.Now, IdKandydata=1, Oplacona=true, Status=StatusAplikacji.Zlozona }
+                new Aplikacja { Id=1, DataZlozenia=DateTime.Now, IdKandydata=1, Oplacona=true, Status=StatusAplikacji.Zlozona, IdTuryRekrutacji=1 }
                 );
             modelBuilder.Entity<Preferencja>()
                 .HasData(
-                new Preferencja { Id=1, IdAplikacji=1, IdKierunku=1, Priorytet=1, WartoscWskaznika = 477.7 });
-           //TODO: ograniczenie ze jedna aplikacja moze miec max 6 pozycji w liscie preferencji
-
+                new Preferencja { Id=1, IdAplikacji=1, IdKierunku=1, Priorytet=1, WartoscWskaznika = 477.7 },
+                new Preferencja { Id=2, IdAplikacji=1, IdKierunku=2, Priorytet=2, WartoscWskaznika = 480.1 }
+                );
+               
+            //TODO: ograniczenie ze jedna aplikacja moze miec max 6 pozycji w liscie preferencji
+            modelBuilder.Entity<Dokument>().HasKey(d => d.Id);
+            modelBuilder.Entity<Aplikacja>()
+                .HasMany(a => a.Dokumenty)
+                .WithOne(d => d.Aplikacja)
+                .HasForeignKey(d => d.IdAplikacji);
+            modelBuilder.Entity<Dokument>()
+                .HasData(
+                    new Dokument
+                    {
+                        Id = 1,
+                        SciezkaPliku = "dokumenty/dok1.pdf",
+                        DataUzyskania = DateTime.Today,
+                        Typ=TypDokumentu.Podanie,
+                        IdAplikacji = 1
+                    },
+                    new Dokument
+                    {
+                        Id = 2,
+                        SciezkaPliku = "dokumenty/dok2.pdf",
+                        DataUzyskania = DateTime.Today,
+                        Typ = TypDokumentu.SwiadectwoDojrzalosci,
+                        IdAplikacji = 1
+                    }
+                );
 
         }
     }
