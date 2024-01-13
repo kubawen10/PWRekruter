@@ -20,5 +20,5 @@ namespace PWRekruter.Models
         public ICollection<Preferencja> Preferencje { get; set; }
         public long IdTuryRekrutacji { get; set; }
         public TuraRekrutacji TuraRekrutacji { get; set; }
-        public ICollection<Dokument> Dokumenty { get; set; }    }
+        public ICollection<Dokument> Dokumenty { get; set; }
 }

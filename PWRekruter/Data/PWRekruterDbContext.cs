@@ -28,7 +28,8 @@ namespace PWRekruter.Data
         public DbSet<Preferencja> Preferencje { get; set; }
         public DbSet<TuraRekrutacji> TuryRekrutacji { get; set; }
         public DbSet<Dokument> Dokumenty { get; set; }
-        public DbSet<Specjalizacja> Specjalizacje { get; set; }        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<Specjalizacja> Specjalizacje { get; set; }        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OdbiorcaWiadomosci>()
                 .HasKey(ow => new {ow.WiadomoscId, ow.OdbiorcaId});
