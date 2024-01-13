@@ -1,0 +1,199 @@
+﻿@using PWRekruter.Enums
+@model PWRekruter.Models.Aplikacja
+
+@{
+    ViewData["Title"] = "Aplikacja";
+    ViewData["Sciezka"] = "Panel kandydata / Aplikacja";
+}
+
+@if (Model != null)
+{
+    <div class="application-details">
+        <div class="space-btw">
+            <span>Status: @Model.Status.GetEnumLabel()</span>
+            <span>Data złożenia: @Model.DataZlozenia.Date.ToShortDateString()</span>
+        </div>
+
+        <div class="space-btw">
+            <div class="flex-column">
+                <span>Opłata rekrutacyjna:</span>
+                <span class="mt-2">
+                    @(Model.Oplacona ? "Opłacona" : "Nieopłacona")
+                    @if (!Model.Oplacona)
+                    {
+                        @if (Model.TuraRekrutacji.TerminWnoszeniaOplatRekrutacyjnych.Date < DateTime.Now.Date)
+                        {
+                            <span>termin opłaty minął</span>
+                        } else
+                        {
+                            <button onclick="sendPost()" class="btn btn-outline-secondary">Opłać <i class="bi bi-arrow-right"></i></button>
+                        }
+                        
+                    }
+                </span>
+                
+            </div>
+            <div style="margin-top: auto; margin-bottom: auto;">
+                @if (Model.TuraRekrutacji.TerminSkladaniaAplikacji.Date < DateTime.Now.Date)
+                {
+                    <button class="btn btn-outline-secondary" disabled>Edytuj kolejność</button>
+                    <button class="btn btn-outline-danger ml-2" disabled>Wycofaj aplikację</button>
+                } else
+                {
+                    <button id="activateDrag" class="btn btn-outline-secondary">Edytuj kolejność</button>
+                    <button type="button" class="btn btn-outline-danger ml-2" data-bs-toggle="modal" data-bs-target="#revokeAplication">Wycofaj aplikację</button>
+                    
+                }
+            </div>
+        </div>
+        <table id="prefTable" class="table table-condensed mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">Numer wyboru</th>
+                    <th scope="col">Nazwa kierunku</th>
+                    <th scope="col">Stopień studiów</th>
+                    <th scope="col">Wskaźnik</th>
+                    <th scope="col">Wynik</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var preferencja in @Model.Preferencje)
+                {
+                    <tr onclick="changeIcon(this)" class="accordion-toggle collapsed" id="visible" draggable="true" data-toggle="collapse" data-target="@("#row" + preferencja.Priorytet)">
+                        <td class="pref">@preferencja.Priorytet</td>
+                        <td>@preferencja.Kierunek.Nazwa</td>
+                        <td>@preferencja.Kierunek.Stopien.GetEnumLabel()</td>
+                        <td>@preferencja.WartoscWskaznika</td>
+                        <td>@(preferencja.Wynik != null ? preferencja.Wynik : "-")</td>
+                        <td>
+                            <span class="chevron"><i class="chevron-icon bi bi-chevron-up" style="-webkit-text-stroke: 1px;"></i></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="12" class="hiddenRow">
+                            <div class="accordian-body collapse" id="@("row" + preferencja.Priorytet)">
+
+                                <div class="d-flex flex-row justify-content-around pt-2 pb-2">
+                                    <span>Tryb studiowania: <br/> @preferencja.Kierunek.Tryb.GetEnumLabel()</span>
+                                    <span>Forma studiów: <br /> @preferencja.Kierunek.Forma.GetEnumLabel()</span>
+                                    <span>Profil kierunku: <br /> @preferencja.Kierunek.Profil.GetEnumLabel()</span>
+                                    <span>Język wykładowy: <br /> @preferencja.Kierunek.JezykWykladowy.GetEnumLabel()</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <span class="mt-5 fs-4">Ważne terminy</span>
+        <hr style="margin-top: 0.3rem;margin-bottom: 0.3rem;border: 0;border-top: 4px solid rgba(0, 0, 0, 0.1);" />
+        <div class="d-flex flex-row justify-content-between">
+            <span>Ostateczny termin składania aplikacji: </span>
+            <span>@Model.TuraRekrutacji.TerminSkladaniaAplikacji.Date.ToShortDateString()</span>
+        </div>
+        <div class="d-flex flex-row justify-content-between">
+            <span>Ostateczny termin wnoszenia opłaty rekrutacyjnej: </span>
+            <span>@Model.TuraRekrutacji.TerminWnoszeniaOplatRekrutacyjnych.Date.ToShortDateString()</span>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+        <div class="modal fade" id="revokeAplication" tabindex="-1" aria-labelledby="revokeAplicationLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Czy na pewno chcesz wycofać swoją aplikację?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Wróć</button>
+                        <button type="button" class="btn btn-secondary" id="deleteButton">Tak</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+     </div>
+
+     
+    <script src="~/js/aplikacja.js"></script>
+    <script>
+        let applicationId = @Model.Id;
+
+        document.getElementById('deleteButton').addEventListener('click', function () {
+            fetch('/Kandydaci/DeleteApplication/' + applicationId, {
+                method: 'DELETE',
+                headers: {
+                    // Add any necessary headers here
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        });
+
+
+
+        document.getElementById('activateDrag').addEventListener('click', function () {
+            isDragEnabled = !isDragEnabled;
+            var dragButton = document.getElementById('activateDrag');
+            var prefs = document.querySelectorAll('.pref');
+            if (isDragEnabled) {
+                dragButton.innerHTML = 'Zatwierdź edycję';
+                disableAndCollapseAccordion();
+                saveInitialOrder();
+            } else {
+                dragButton.innerHTML = 'Edytuj kolejność';
+
+            }
+
+            toggleDraggableRows();
+
+            if (!isDragEnabled) {
+                updateOrder();
+                sendReorderRequest();
+                
+            }
+        });
+        function disableAndCollapseAccordion() {
+
+            document.querySelectorAll('#prefTable tbody #visible').forEach(row => {
+                row.setAttribute('data-target', row.getAttribute('data-target') + '.')
+            });
+            var collapseElements = document.querySelectorAll('#prefTable .collapse');
+            collapseElements.forEach(function (el) {
+                var collapseInstance = new bootstrap.Collapse(el, {
+                    toggle: false
+                });
+                collapseInstance.hide();
+            });
+            document.querySelectorAll('.chevron-icon').forEach(icon => {
+                icon.classList.remove('bi-chevron-down');
+                icon.classList.add('bi-chevron-up');
+            })
+            
+
+        }
+
+    </script>
+
+}
+else
+{
+    <div class="application-not-found">
+        <p>Nie złożyłeś jeszcze aplikacji. Aby to zrobić przejdź do panelu składania plikacji</p>
+        <button  asp-action="Index" class="btn btn-outline-secondary">Przejdź <i class="bi bi-arrow-right"></i></button>
+    </div>
+}

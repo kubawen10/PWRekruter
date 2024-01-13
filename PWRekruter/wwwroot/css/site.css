@@ -207,3 +207,35 @@ nav {
 
 
 
+.application-not-found {
+    max-width: 50%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    
+}
+
+.space-btw {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+}
+
+.hiddenRow {
+    padding: 0 !important;
+}
+.dragging {
+    opacity: 0.5;
+}
+.chevron:hover {
+    cursor: pointer;
+}
