@@ -68,7 +68,7 @@
                 <tr>
                         <td>
                             <strong>@Html.DisplayFor(modelItem => item.Nazwa)</strong><br />
-                            <small>@Html.DisplayFor(modelItem=>item.Stopien), @Html.DisplayFor(modelItem=>item.Forma)</small>
+                            <small>@Html.DisplayFor(modelItem=>item.Stopien.GetEnumLabel()), @Html.DisplayFor(modelItem=>item.Forma)</small>
                         </td>
            
                     <td class="right-align">

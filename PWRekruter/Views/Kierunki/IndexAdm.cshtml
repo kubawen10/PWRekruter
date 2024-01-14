@@ -12,7 +12,7 @@
             <input class="form-control" type="text" name="SearchString" placeholder="Szukaj" />
             <button class="btn btn-outline-secondary ml-3" type="submit">Szukaj</button>
         </form>
-    <a class="btn btn-outline-secondary" asp-action="Create">Dodaj <i class="bi bi-plus"></i></a>
+    <a class="btn btn-outline-secondary" asp-action="Create" asp-route-symbol="@ViewBag.Symbol">Dodaj <i class="bi bi-plus"></i></a>
     
 </div>
 

@@ -1,0 +1,189 @@
+﻿@model PWRekruter.Models.Kierunek
+@using PWRekruter.Enums
+@{
+	ViewData["Title"] = "Index";
+	ViewData["Sciezka"] = "Panel rekrutera / Wydziały / " + ViewBag.Symbol + " / Kierunki / Dodaj";
+}
+
+<div class="pl-4 pr-4">
+<form asp-action="Create">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+	<h6>Informacje ogólne</h6>
+	<hr style="margin-top: 0.4rem;" />
+
+	<div class="d-flex d-row justify-content-between">
+		<div class="form-group">
+			<label asp-for="Skrot" class="control-label"></label>
+			<input asp-for="Skrot" class="form-control" />
+			<span asp-validation-for="Skrot" class="text-danger"></span>
+		</div>
+		<div class="form-group" style="width: 60%;">
+			<label asp-for="Nazwa" class="control-label"></label>
+			<input asp-for="Nazwa" class="form-control" />
+			<span asp-validation-for="Nazwa" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="d-flex d-row justify-content-between">
+		<div class="form-group ">
+			<label asp-for="Stopien" class="control-label"></label>
+			<select asp-for="Stopien" class="form-control" asp-items="Html.GetEnumSelectList<StopienStudiow>()"></select>
+			<span asp-validation-for="Stopien" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="Tryb" class="control-label"></label>
+			<select asp-for="Tryb" class="form-control" asp-items="Html.GetEnumSelectList<TrybStudiow>()"></select>
+			<span asp-validation-for="Tryb" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="Forma" class="control-label"></label>
+			<select asp-for="Forma" class="form-control" asp-items="Html.GetEnumSelectList<FormaStudiow>()"></select>
+			<span asp-validation-for="Forma" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="form-group">
+		<label asp-for="CzasTrwania" class="control-label"></label>
+		<div class="input-group">
+		<input asp-for="CzasTrwania" class="form-control" aria-describedby="semester-addon" />
+		<span class="input-group-text" id="semester-addon">semestry/-ów</span>
+		</div>
+		<span asp-validation-for="CzasTrwania" class="text-danger"></span>
+	</div>
+	<div class="mt-4">
+		<h6>Profil naukowy</h6>
+		<hr style="margin-top: 0.4rem;"/>
+	</div>
+
+	<div class="d-flex d-row justify-content-between">
+		<div class="form-group">
+			<label asp-for="JezykWykladowy" class="control-label"></label>
+			<select asp-for="JezykWykladowy" class="form-control" asp-items="Html.GetEnumSelectList<Jezyk>()"></select>
+			<span asp-validation-for="JezykWykladowy" class="text-danger"></span>
+		</div>
+		<div class="form-group" style="width: 60%;">
+			<label asp-for="DyscyplinaNaukowa" class="control-label"></label>
+			<input asp-for="DyscyplinaNaukowa" class="form-control" />
+			<span asp-validation-for="DyscyplinaNaukowa" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="d-flex d-row justify-content-between">
+		<div class="form-group">
+			<label asp-for="Profil" class="control-label"></label>
+			<select asp-for="Profil" class="form-control" asp-items="Html.GetEnumSelectList<ProfilKierunku>()"></select>
+			<span asp-validation-for="Profil" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="IdProgramuStudiow" class="control-label"></label>
+			<select asp-for="IdProgramuStudiow" class="form-control" asp-items="ViewBag.ProgramyStudiow"></select>
+		</div>
+	</div>
+	<div class="mt-2" style="padding-left: 4rem; padding-right: 4rem;">
+			<div class="d-flex justify-content-between align-items-center">
+				<span>Specjalizacje</span>
+				<button type="button" id="addSpecjalizacjaButton" class="btn btn-outline-secondary">Dodaj</button>
+		</div>
+			
+			<hr style="margin-top: 0.4rem;" />
+			<div id="specjalizacjaContainer"></div>
+	</div>
+	
+	
+	
+	<div class="mt-4">
+			<h6>Finanse i rekrutacja</h6>
+			<hr style="margin-top: 0.4rem;" />
+	</div>
+	
+	<div class="d-flex d-row">
+		<div class="form-group">
+			<label asp-for="Czesne" class="control-label"></label>
+			<div class="input-group">
+				<input asp-for="Czesne" class="form-control" aria-describedby="tuition-addon" />
+				<span class="input-group-text" id="tuition-addon">zł</span>
+			</div>
+			<span asp-validation-for="Czesne" class="text-danger"></span>
+		</div>
+		<div class="form-group ml-4">
+			<label asp-for="CzesneDlaCudzoziemcow" class="control-label"></label>
+			<div class="input-group">
+				<input asp-for="CzesneDlaCudzoziemcow" class="form-control" aria-describedby="tuition-foreign-addon">
+				<span class="input-group-text" id="tuition-foreign-addon">€</span>
+			</div>
+			<span asp-validation-for="CzesneDlaCudzoziemcow" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="d-flex d-row">
+		<div class="form-group">
+			<label asp-for="LiczbaMiejsc" class="control-label"></label>
+			<input asp-for="LiczbaMiejsc" class="form-control" />
+			<span asp-validation-for="LiczbaMiejsc" class="text-danger"></span>
+		</div>
+		<div class="form-group ml-4">
+			<label asp-for="OplataRekrutacyjna" class="control-label"></label>
+			<div class="input-group">
+				<input asp-for="OplataRekrutacyjna" class="form-control" aria-describedby="fee-addon" >
+				<span class="input-group-text" id="fee-addon">zł</span>
+			</div>
+			<span asp-validation-for="OplataRekrutacyjna" class="text-danger"></span>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label asp-for="Opis" class="control-label"></label>
+		<textarea asp-for="Opis" class="form-control"></textarea>
+		<span asp-validation-for="Opis" class="text-danger"></span>
+	</div>
+		<input type="hidden" asp-for="SymbolWydzialu" name="SymbolWydzialu" value="@ViewBag.Symbol" />
+
+	<div class="form-group d-flex d-row justify-content-end">
+		<a class="btn btn-outline-secondary" asp-action="Index">Wróć</a>
+			<input class="ml-4 btn btn-primary" type="submit" value="Dodaj"/>
+	</div>
+</form>
+</div>
+
+
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
+<script>
+	let specjalizacjaCount = 0;
+
+	document.getElementById('addSpecjalizacjaButton').addEventListener('click', function () {
+		const container = document.getElementById('specjalizacjaContainer');
+		const sectionId = `specjalizacjaSection_${specjalizacjaCount}`;
+
+		const section = document.createElement('div');
+		section.setAttribute('id', sectionId);
+		section.innerHTML = `
+				<div class="d-flex justify-content-between">
+					<div class="d-flex">
+					<div class="form-group">
+						<label>Nazwa</label>
+						<input type="text" name="Specjalizacje[${specjalizacjaCount}].Nazwa" class="form-control" />
+					</div>
+					<div class="form-group ml-4">
+						<label>Symbol</label>
+						<input type="text" name="Specjalizacje[${specjalizacjaCount}].Symbol" class="form-control" />
+					</div>
+				</div>
+					<button type="button" onclick="removeSection('${sectionId}')" class="btn btn-outline-danger" style="margin-top: auto; margin-bottom: auto;"><i class="bi bi-trash3-fill"></i></button>
+				</div>
+				<div class="form-group">
+					<label>Opis</label>
+					<textarea name="Specjalizacje[${specjalizacjaCount}].Opis" class="form-control"></textarea>
+				</div>
+				<hr/>
+			`;
+		container.appendChild(section);
+		specjalizacjaCount++;
+	});
+
+	function removeSection(sectionId) {
+		const section = document.getElementById(sectionId);
+		section.parentNode.removeChild(section);
+	}
+</script>

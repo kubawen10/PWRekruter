@@ -39,7 +39,7 @@ namespace PWRekruter.Data
                 .WithOne(ow => ow.Wiadomosc)
                 .HasForeignKey(ow => ow.WiadomoscId);
 
-            modelBuilder.Entity<OdbiorcaWiadomosci>()
+			modelBuilder.Entity<OdbiorcaWiadomosci>()
                 .HasOne(ow => ow.Odbiorca)
                 .WithMany(k => k.OdebraneWiadomosci)
                 .HasForeignKey(ow => ow.OdbiorcaId);
@@ -81,7 +81,8 @@ namespace PWRekruter.Data
                     new Rekruter { Id = 9, Email = "rekruter4", Haslo = "haslo" },
                     new Rekruter { Id = 10, Email = "rekruter5", Haslo = "haslo" });
 
-            modelBuilder.Entity<Kierunek>().HasKey(x => x.Id);
+            modelBuilder.Entity<Kierunek>()
+                .HasKey(x => x.Id);
             modelBuilder.Entity<Kierunek>()
                 .HasData(
                     new Kierunek
@@ -150,7 +151,7 @@ namespace PWRekruter.Data
            .HasForeignKey(k => k.IdProgramuStudiow)
            .IsRequired(false);
             modelBuilder.Entity<ProgramStudiow>().HasData(
-                new ProgramStudiow { Id = 1, ProgramSciezka = "programy/pr1.pdf", PlanSciezka="plany/pl1.pdf" });
+                new ProgramStudiow { Id = 1, Nazwa="IST-IST", ProgramSciezka = "programy/pr1.pdf", PlanSciezka="plany/pl1.pdf" });
             
             modelBuilder.Entity<ProgPunktowy>()
                 .HasKey(pp=>pp.Id);
@@ -158,7 +159,12 @@ namespace PWRekruter.Data
                 .HasMany(k => k.HistoryczneProgi)
                 .WithOne(pp => pp.Kierunek)
                 .HasForeignKey(pp => pp.IdKierunku);
-            modelBuilder.Entity<ProgPunktowy>()
+
+			modelBuilder.Entity<Kierunek>()
+				.HasMany(k => k.Specjalizacje)
+				.WithOne(s => s.Kierunek)
+				.HasForeignKey(pp => pp.IdKierunku).OnDelete(DeleteBehavior.SetNull);
+			modelBuilder.Entity<ProgPunktowy>()
                 .HasData(
                 new ProgPunktowy { Id = 1, Rok = 2021, Wartosc = 446.0, IdKierunku =1 },
                 new ProgPunktowy { Id = 2, Rok = 2022, Wartosc = 467.6, IdKierunku = 1 },

@@ -10,5 +10,6 @@ namespace PWRekruter.Models
         public string Symbol {  get; set; }
         public string Opis {  get; set; }
         public long IdKierunku { get; set; }
+        public Kierunek Kierunek { get; set; }
     }
 }
