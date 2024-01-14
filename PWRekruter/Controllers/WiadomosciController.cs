@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -104,6 +105,7 @@ namespace PWRekruter.Controllers
                     && (string.IsNullOrEmpty(wiadomoscViewModel.Imie) || p.Aplikacja.Kandydat.Imie == wiadomoscViewModel.Imie)
                     && (string.IsNullOrEmpty(wiadomoscViewModel.Nazwisko) || p.Aplikacja.Kandydat.Nazwisko == wiadomoscViewModel.Nazwisko))
                 .Select(p => p.Aplikacja.Kandydat.Id)
+                .Distinct()
                 .ToListAsync();
 
             return ids;
@@ -118,9 +120,13 @@ namespace PWRekruter.Controllers
         {
             if (ModelState.IsValid)
             {
-                List<int> ids = await GetIdOdbiorcyWiadomosciList(wiadomoscView);
+                List<int> idOdbiorcow = await GetIdOdbiorcyWiadomosciList(wiadomoscView);
+                foreach (int id in idOdbiorcow)
+                {
+                    Debug.WriteLine(id);
+                }
 
-                if(ids.Count == 0)
+                if(idOdbiorcow.Count == 0)
                 {
                     ViewBag.BrakKandydatow = true;
                     ViewBag.UserType = "Rekruter";
@@ -136,10 +142,10 @@ namespace PWRekruter.Controllers
                     Tytul = wiadomoscView.Tytul,
                     Tresc = wiadomoscView.Tresc,
                     Data = DateTime.Now,
+                    Odbiorcy = new Collection<OdbiorcaWiadomosci>()
                 };
-                _context.Add(wiadomosc);
 
-                foreach (int id in ids)
+                foreach (int id in idOdbiorcow)
                 {
                     OdbiorcaWiadomosci odbiorcaWiadomosci = new OdbiorcaWiadomosci 
                     { 
@@ -149,7 +155,8 @@ namespace PWRekruter.Controllers
 
                     _context.Add(odbiorcaWiadomosci);
                 }
-                
+                _context.Add(wiadomosc);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
