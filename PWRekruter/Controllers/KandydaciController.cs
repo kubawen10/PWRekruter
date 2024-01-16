@@ -80,20 +80,17 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Kandydaci/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            int kandydatId = _loginService.GetUserId();
 
-            var kandydat = await _context.Kandydaci.FindAsync(id);
+            var kandydat = await _context.Kandydaci.FindAsync(kandydatId);
             if (kandydat == null)
             {
                 return NotFound();
             }
 
-            KandydatViewModel kandydatView = new KandydatViewModel
+            KandydatViewModel kandydatViewModel = new KandydatViewModel
             {
                 Imie = kandydat.Imie,
                 DrugieImie = kandydat.DrugieImie,
@@ -108,21 +105,20 @@ namespace PWRekruter.Controllers
                 NumerBudynku = kandydat.NumerBudynku,
                 NumerMieszkania = kandydat.NumerMieszkania
             };
-            Debug.WriteLine(kandydat.DataUrodzenia);
-            return View(kandydatView);
+            return View(kandydatViewModel);
         }
 
-        // POST: Kandydaci/Edit/5
+        // POST: Kandydaci/Edit/
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Imie,DrugieImie,Nazwisko,Pesel,Plec,DataUrodzenia,Panstwo,KodPocztowy,Miejscowosc,Ulica,NumerBudynku,NumerMieszkania")] KandydatViewModel kandydatView)
+        public async Task<IActionResult> Edit([Bind("Imie,DrugieImie,Nazwisko,Pesel,Plec,DataUrodzenia,Panstwo,KodPocztowy,Miejscowosc,Ulica,NumerBudynku,NumerMieszkania")] KandydatViewModel kandydatView)
         {
             if (ModelState.IsValid)
             {
-
-                var kandydat = await _context.Kandydaci.FindAsync(id);
+                var kandydatId = _loginService.GetUserId();
+                var kandydat = await _context.Kandydaci.FindAsync(kandydatId);
                 if (kandydat == null)
                 {
                     return NotFound();
@@ -133,7 +129,6 @@ namespace PWRekruter.Controllers
                 kandydat.Nazwisko = kandydatView.Nazwisko;
                 kandydat.Pesel = kandydatView.Pesel;
                 kandydat.Plec = kandydatView.Plec;
-                Debug.WriteLine(kandydatView.DataUrodzenia);
                 kandydat.DataUrodzenia = kandydatView.DataUrodzenia;
                 kandydat.Panstwo = kandydatView.Panstwo;
                 kandydat.KodPocztowy = kandydatView.KodPocztowy;

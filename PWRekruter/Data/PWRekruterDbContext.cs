@@ -67,8 +67,9 @@ namespace PWRekruter.Data
             modelBuilder.Entity<Kandydat>()
                 .HasData(
                     new Kandydat { Id = 1, Email = "kandydat1", Haslo = "haslo", 
-                        Imie="Adam", DrugieImie="Paweł", Nazwisko="Nowak"},
-                    new Kandydat { Id = 2, Email = "kandydat2", Haslo = "haslo" },
+                        Imie = "Adam", DrugieImie = "Paweł", Nazwisko = "Nowak"},
+                    new Kandydat { Id = 2, Email = "kandydat2", Haslo = "haslo",
+                        Imie = "Jan", DrugieImie = "Jakub", Nazwisko = "Kowalski"},
                     new Kandydat { Id = 3, Email = "kandydat3", Haslo = "haslo" },
                     new Kandydat { Id = 4, Email = "kandydat4", Haslo = "haslo" },
                     new Kandydat { Id = 5, Email = "kandydat5", Haslo = "haslo" });
@@ -202,12 +203,15 @@ namespace PWRekruter.Data
 
             modelBuilder.Entity<Aplikacja>()
                 .HasData(
-                new Aplikacja { Id=1, DataZlozenia=DateTime.Now, IdKandydata=1, Oplacona=true, Status=StatusAplikacji.Zlozona, IdTuryRekrutacji=1 }
+                new Aplikacja { Id=1, DataZlozenia=DateTime.Now, IdKandydata=1, Oplacona=true, Status=StatusAplikacji.Zlozona, IdTuryRekrutacji=1 },
+                new Aplikacja { Id = 2, DataZlozenia = DateTime.Now, IdKandydata = 2, Oplacona = true, Status = StatusAplikacji.Zlozona, IdTuryRekrutacji = 1 }
                 );
             modelBuilder.Entity<Preferencja>()
                 .HasData(
                 new Preferencja { Id=1, IdAplikacji=1, IdKierunku=1, Priorytet=1, WartoscWskaznika = 477.7 },
-                new Preferencja { Id=2, IdAplikacji=1, IdKierunku=2, Priorytet=2, WartoscWskaznika = 480.1, IdWybranejSpecjalizacji=1 }
+                new Preferencja { Id=2, IdAplikacji=1, IdKierunku=2, Priorytet=2, WartoscWskaznika = 480.1, IdWybranejSpecjalizacji=1 },
+                new Preferencja { Id = 3, IdAplikacji = 2, IdKierunku = 2, Priorytet = 1, WartoscWskaznika = 477.7 },
+                new Preferencja { Id = 4, IdAplikacji = 2, IdKierunku = 1, Priorytet = 2, WartoscWskaznika = 477.7 }
                 );
                
             //TODO: ograniczenie ze jedna aplikacja moze miec max 6 pozycji w liscie preferencji
