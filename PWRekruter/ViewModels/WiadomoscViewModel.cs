@@ -22,5 +22,14 @@ namespace PWRekruter.ViewModels
         [Required(ErrorMessage = "Podaj treść wiadomości")]
         [Display(Name = "Treść")]
         public string Tresc { get; set; }
+
+        public bool PusteDaneOdbiorcy()
+        {
+            return string.IsNullOrEmpty(Wydzial)
+                && string.IsNullOrEmpty(Kierunek)
+                && string.IsNullOrEmpty(Maile)
+                && string.IsNullOrEmpty(Imie)
+                && string.IsNullOrEmpty(Nazwisko);
+        }
     }
 }

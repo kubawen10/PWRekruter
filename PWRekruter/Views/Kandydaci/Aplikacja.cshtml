@@ -40,7 +40,7 @@
                     <button class="btn btn-outline-danger ml-2" disabled>Wycofaj aplikację</button>
                 } else
                 {
-                    <button id="activateDrag" class="btn btn-outline-secondary">Edytuj kolejność</button>
+                    <button id="activateDrag" class="btn btn-outline-secondary" type="button" data-bs-toggle="button">Edytuj kolejność</button>
                     <button type="button" class="btn btn-outline-danger ml-2" data-bs-toggle="modal" data-bs-target="#revokeAplication">Wycofaj aplikację</button>
                     
                 }
@@ -79,6 +79,11 @@
                                     <span>Forma studiów: <br /> @preferencja.Kierunek.Forma.GetEnumLabel()</span>
                                     <span>Profil kierunku: <br /> @preferencja.Kierunek.Profil.GetEnumLabel()</span>
                                     <span>Język wykładowy: <br /> @preferencja.Kierunek.JezykWykladowy.GetEnumLabel()</span>
+                                    @if (preferencja.IdWybranejSpecjalizacji != null)
+                                    {
+                                        <span>Wybrana specjalizacja: <br /> @preferencja.WybranaSpecjalizacja.Nazwa</span>
+                                    }
+                                    
                                 </div>
                             </div>
                         </td>
@@ -188,7 +193,6 @@
         }
 
     </script>
-
 }
 else
 {

@@ -4,6 +4,8 @@ using PWRekruter.Data;
 using PWRekruter.Enums;
 using PWRekruter.Models;
 using PWRekruter.Services;
+using PWRekruter.ViewModels;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +31,12 @@ namespace PWRekruter.Controllers
         public async Task<IActionResult> Index()
         {
             int kandydatId = _loginService.GetUserId();
-            return View(await _context.Kandydaci.FirstOrDefaultAsync(k => k.Id == kandydatId));
+            var kandydat = await _context.Kandydaci.FindAsync(kandydatId);
+            if (kandydat == null)
+            {
+                return NotFound();
+            }
+            return View(kandydat);
         }
 
         // GET: Kandydaci/Details/5
@@ -73,54 +80,69 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Kandydaci/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            int kandydatId = _loginService.GetUserId();
 
-            var kandydat = await _context.Kandydaci.FindAsync(id);
+            var kandydat = await _context.Kandydaci.FindAsync(kandydatId);
             if (kandydat == null)
             {
                 return NotFound();
             }
-            return View(kandydat);
+
+            KandydatViewModel kandydatViewModel = new KandydatViewModel
+            {
+                Imie = kandydat.Imie,
+                DrugieImie = kandydat.DrugieImie,
+                Nazwisko = kandydat.Nazwisko,
+                Pesel = kandydat.Pesel,
+                Plec = kandydat.Plec,
+                DataUrodzenia = kandydat.DataUrodzenia,
+                Panstwo = kandydat.Panstwo,
+                KodPocztowy = kandydat.KodPocztowy,
+                Miejscowosc = kandydat.Miejscowosc,
+                Ulica = kandydat.Ulica,
+                NumerBudynku = kandydat.NumerBudynku,
+                NumerMieszkania = kandydat.NumerMieszkania
+            };
+            return View(kandydatViewModel);
         }
 
-        // POST: Kandydaci/Edit/5
+        // POST: Kandydaci/Edit/
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Imie,DrugieImie,Nazwisko,Pesel,Plec,DataUrodzenia,Panstwo,KodPocztowy,Miejscowosc,Ulica,NumerBudynku,NumerMieszkania,Id,Email,Haslo")] Kandydat kandydat)
+        public async Task<IActionResult> Edit([Bind("Imie,DrugieImie,Nazwisko,Pesel,Plec,DataUrodzenia,Panstwo,KodPocztowy,Miejscowosc,Ulica,NumerBudynku,NumerMieszkania")] KandydatViewModel kandydatView)
         {
-            if (id != kandydat.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                var kandydatId = _loginService.GetUserId();
+                var kandydat = await _context.Kandydaci.FindAsync(kandydatId);
+                if (kandydat == null)
                 {
-                    _context.Update(kandydat);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!KandydatExists(kandydat.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                kandydat.Imie = kandydatView.Imie;
+                kandydat.DrugieImie = kandydatView.DrugieImie;
+                kandydat.Nazwisko = kandydatView.Nazwisko;
+                kandydat.Pesel = kandydatView.Pesel;
+                kandydat.Plec = kandydatView.Plec;
+                kandydat.DataUrodzenia = kandydatView.DataUrodzenia;
+                kandydat.Panstwo = kandydatView.Panstwo;
+                kandydat.KodPocztowy = kandydatView.KodPocztowy;
+                kandydat.Miejscowosc = kandydatView.Miejscowosc;
+                kandydat.Ulica = kandydatView.Ulica;
+                kandydat.NumerBudynku = kandydatView.NumerBudynku;
+                kandydat.NumerMieszkania = kandydatView.NumerMieszkania;
+
+                _context.Update(kandydat);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(kandydat);
+            return View(kandydatView);
         }
 
         // GET: Kandydaci/Delete/5
@@ -175,9 +197,14 @@ namespace PWRekruter.Controllers
                                    .Where(pref => pref.IdAplikacji == aplikacja.Id)
                                    .OrderBy(pref => pref.Priorytet)
                                    .ToListAsync();
+            
             foreach (var preferencja in aplikacja.Preferencje)
             {
                 preferencja.Kierunek = await _context.Kierunki.FirstOrDefaultAsync(k => k.Id == preferencja.IdKierunku);
+                if (preferencja.IdWybranejSpecjalizacji != null)
+                {
+                    preferencja.WybranaSpecjalizacja = await _context.Specjalizacje.FirstOrDefaultAsync(s => s.Id == preferencja.IdWybranejSpecjalizacji);
+                }
             }
             return View(aplikacja);
             
@@ -210,15 +237,15 @@ namespace PWRekruter.Controllers
 
         // DELETE: Kandydaci/DeleteApplication/{id}
         [HttpDelete]
-        public async Task<IActionResult> DeleteApplication(long id)
+        public IActionResult DeleteApplication(long id)
         {
-            Aplikacja aplikacja = await _context.Aplikacje.FirstOrDefaultAsync(a => a.Id == id);
+            Aplikacja aplikacja = _context.Aplikacje.Find(id);
             if (aplikacja == null)
             {
                 return NotFound();
             }
             _context.Aplikacje.Remove(aplikacja);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Aplikacja));
         }
     }

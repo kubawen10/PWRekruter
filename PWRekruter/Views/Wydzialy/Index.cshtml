@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PWRekruter.Models.Wydzial>
+
+@{
+    ViewData["Title"] = "Wydzialy";
+    ViewData["Sciezka"] = "Panel rekrutera / Wydziały";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Symbol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nazwa)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.Symbol)
+            </td>
+                <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.Nazwa)
+            </td>
+                <td class="align-middle">
+                <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@item.Symbol">Wybierz <i class="bi bi-arrow-right"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

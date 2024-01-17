@@ -32,23 +32,16 @@ namespace PWRekruter.Controllers
         // GET: Egzaminy/Edit
         public IActionResult Edit()
         {
-            string typWynikuEgzaminu = TempData["TypWynikuEgzaminu"] as string;
-            if (string.IsNullOrEmpty(typWynikuEgzaminu))
-            {
-                typWynikuEgzaminu = (Convert.ToInt32(TypWynikuEgzaminu.MaturaOKE)).ToString();
-            }
-
             List<dynamic> typWynikuEgzaminuList = new List<dynamic>();
 
-            foreach (var x in Enum.GetValues(typeof(TypWynikuEgzaminu)).Cast<TypWynikuEgzaminu>())
+            foreach (var typWyniku in Enum.GetValues(typeof(TypWynikuEgzaminu)).Cast<TypWynikuEgzaminu>())
             {
                 dynamic typ = new ExpandoObject();
-                typ.val = (Convert.ToInt32(x)).ToString();
-                typ.text = x.GetEnumLabel();
+                typ.val = (Convert.ToInt32(typWyniku)).ToString();
+                typ.text = typWyniku.GetEnumLabel();
                 typWynikuEgzaminuList.Add(typ);
             }
 
-            ViewBag.TypWynikuEgzaminu = typWynikuEgzaminu;
             ViewBag.TypWynikuEgzaminuList = typWynikuEgzaminuList;
 
             return View();
@@ -58,12 +51,10 @@ namespace PWRekruter.Controllers
         {
             if (!Enum.IsDefined(typeof(TypWynikuEgzaminu), id))
             {
-                TempData["TypWynikuEgzaminu"] = "";
                 return RedirectToAction(nameof(Edit));
             }
             else
             {
-                TempData["TypWynikuEgzaminu"] = id;
                 switch (id)
                 {
                     case (int)TypWynikuEgzaminu.Olimpiada:
@@ -120,20 +111,20 @@ namespace PWRekruter.Controllers
         {
 			foreach (var wynik in wyniki)
 			{
-				var existingWynik = await _context.WynikiOlimpiady
+				var istniejacyWynik = await _context.WynikiOlimpiady
 						.FirstOrDefaultAsync(w => w.Id == wynik.Id);
 
-				if (wynik.TytulOlimpijczyka != null && existingWynik != null)
+				if (wynik.TytulOlimpijczyka != null && istniejacyWynik != null)
 				{
-					existingWynik.TytulOlimpijczyka = wynik.TytulOlimpijczyka;
-					_context.WynikiOlimpiady.Update(existingWynik);
-				} else if (wynik.TytulOlimpijczyka != null && existingWynik == null)
+					istniejacyWynik.TytulOlimpijczyka = wynik.TytulOlimpijczyka;
+					_context.WynikiOlimpiady.Update(istniejacyWynik);
+				} else if (wynik.TytulOlimpijczyka != null && istniejacyWynik == null)
                 {
 					wynik.KandydatId = _loginService.GetUserId();
 					_context.WynikiOlimpiady.Add(wynik);
-                } else if (wynik.TytulOlimpijczyka == null && existingWynik != null)
+                } else if (wynik.TytulOlimpijczyka == null && istniejacyWynik != null)
                 {
-					_context.WynikiOlimpiady.Remove(existingWynik);
+					_context.WynikiOlimpiady.Remove(istniejacyWynik);
 				}
 			}
 

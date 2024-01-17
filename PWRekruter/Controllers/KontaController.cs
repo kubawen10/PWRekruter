@@ -17,9 +17,9 @@ namespace PWRekruter.Controllers
             if (_loginService.GetUserType() == UserType.Kandydat)
             {
                 return RedirectToAction("Index", "Kandydaci");
-            } else // TODO redirect dla rekrutera
+            } else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Rekruterzy");
             }
         }
     }

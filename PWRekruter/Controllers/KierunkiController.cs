@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using PWRekruter.Data;
 using PWRekruter.Models;
 using PWRekruter.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis;
 
 namespace PWRekruter.Controllers
 {
@@ -102,27 +104,7 @@ namespace PWRekruter.Controllers
             return View(kierunek);
         }
 
-        // GET: Kierunki/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Kierunki/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Skrot,Nazwa,Stopien,Tryb,Forma,CzasTrwania,DyscyplinaNaukowa,JezykWykladowy,Profil,Czesne,CzesneDlaCudzoziemcow,LiczbaMiejsc,OplataRekrutacyjna,Opis")] Kierunek kierunek)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(kierunek);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(kierunek);
-        }
+        
 
         // GET: Kierunki/Edit/5
         public async Task<IActionResult> Edit(long? id)
@@ -208,5 +190,66 @@ namespace PWRekruter.Controllers
         {
             return _context.Kierunki.Any(e => e.Id == id);
         }
+        public async Task<IActionResult> IndexAdm(string Symbol, string? SearchString)
+        {
+            ViewBag.Symbol = Symbol;
+            var kierunkiQuery = _context.Kierunki.AsQueryable();
+
+            kierunkiQuery = kierunkiQuery.Where(k => k.SymbolWydzialu == Symbol);
+
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                kierunkiQuery = kierunkiQuery.Where(k => k.Nazwa.ToLower().Contains(SearchString.ToLower()));
+            }
+            return View(await kierunkiQuery.ToListAsync());
+        }
+
+        // GET: Kierunki/Create
+        public async Task<IActionResult> Create(string Symbol)
+        {
+            ViewBag.Symbol = Symbol;
+			ViewBag.ProgramyStudiow = new List<SelectListItem>
+            {
+	            new SelectListItem { Text = "Select an option", Value = string.Empty }
+            };
+
+			ViewBag.ProgramyStudiow.AddRange(await _context.ProgramyStudiow.Select(p => new SelectListItem
+			{
+				Text = p.Nazwa,
+				Value = p.Id.ToString()
+			}).ToListAsync());
+			return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(Kierunek kierunek)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(kierunek);
+                foreach (Specjalizacja spec in kierunek.Specjalizacje)
+                {
+                    _context.Add(spec);
+                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+			ViewBag.Symbol = kierunek.SymbolWydzialu;
+
+			ViewBag.ProgramyStudiow = new List<SelectListItem>
+			{
+				new SelectListItem { Text = "Wybierz opcję", Value = string.Empty }
+			};
+
+			ViewBag.ProgramyStudiow.AddRange(await _context.ProgramyStudiow.Select(p => new SelectListItem
+			{
+				Text = p.Nazwa,
+				Value = p.Id.ToString()
+			}).ToListAsync());
+
+			return View(kierunek);
+        }
+
     }
 }

@@ -1,8 +1,13 @@
-﻿namespace PWRekruter.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace PWRekruter.Models
 {
     public class ProgPunktowy
     {
-        public long Id { get; set; }
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public long Id { get; set; }
         public int Rok {  get; set; }
         public double Wartosc { get; set; }
         public long IdKierunku { get; set; }

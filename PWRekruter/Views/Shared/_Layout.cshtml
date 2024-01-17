@@ -43,12 +43,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Logowanie" asp-action="Login">Utwórz konto</a>
                             </li>
                         }
-                        @if (Context.Request.Cookies["UserType"]=="Rekruter")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Aplikacje" asp-action="Index">Aplikacje</a>
-                            </li>
-                        }
+                       
                     </ul>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,13 +28,15 @@ namespace PWRekruter.Controllers
         // GET: Wiadomosci
         public async Task<IActionResult> Index()
         {
+            var userId = _loginService.GetUserId();
             // wiadomosci do obecnego uzytkownika
             var wiadomosci = _context.OdbiorcyWiadomosci
                 .Include(w => w.Wiadomosc.Nadawca)
-                .Where(ow => ow.OdbiorcaId == _loginService.GetUserId())
-                .Select(w => w.Wiadomosc);
+                .Where(ow => ow.OdbiorcaId == userId)
+                .Select(w => w.Wiadomosc)
+                .ToListAsync();
 
-            return View(await wiadomosci.ToListAsync());
+            return View(await wiadomosci);
         }
 
         // GET: Wiadomosci/Details/5
@@ -59,13 +62,14 @@ namespace PWRekruter.Controllers
         // GET: Wiadomosci/Create
         public async Task<IActionResult> Create()
         {
-            if (_loginService.GetUserType() == UserType.Rekruter)
-            {
-                ViewBag.UserType = "Rekruter";
-            } else
+            var userType = _loginService.GetUserType();
+            if (userType == UserType.Kandydat)
             {
                 ViewBag.UserType = "Kandydat";
+                return View();
             }
+
+            ViewBag.UserType = "Rekruter";
 
 			var wydzialy = await _context.Wydzialy.ToListAsync();
 			ViewBag.Wydzialy = wydzialy;
@@ -79,11 +83,18 @@ namespace PWRekruter.Controllers
         private async Task<List<int>> GetIdOdbiorcyWiadomosciList(WiadomoscViewModel wiadomoscViewModel)
         {
             // user==Kandydat => mail do pierwszego rekrutera
-            if (_loginService.GetUserType() == UserType.Kandydat)
+            var userType = _loginService.GetUserType();
+            if (userType == UserType.Kandydat)
             {
                 var rekruterId = await _context.Rekruterzy.Select(r=>r.Id).FirstOrDefaultAsync();
                 return new List<int> { rekruterId };
             }
+
+            if(wiadomoscViewModel.PusteDaneOdbiorcy())
+            {
+                return new List<int>();
+            }
+
             string[] maile = new string[0];
             if (!string.IsNullOrEmpty(wiadomoscViewModel.Maile))
             {
@@ -97,13 +108,13 @@ namespace PWRekruter.Controllers
                     .ThenInclude(a => a.Kandydat)
                 .Include(p => p.Kierunek)
                     .ThenInclude(k => k.Wydzial)
-                .Where(p =>
-                    (string.IsNullOrEmpty(wiadomoscViewModel.Wydzial) || p.Kierunek.Wydzial.Symbol == wiadomoscViewModel.Wydzial)
+                .Where(p => (string.IsNullOrEmpty(wiadomoscViewModel.Wydzial) || p.Kierunek.Wydzial.Symbol == wiadomoscViewModel.Wydzial)
                     && (string.IsNullOrEmpty(wiadomoscViewModel.Kierunek) || p.Kierunek.Skrot == wiadomoscViewModel.Kierunek)
                     && (string.IsNullOrEmpty(wiadomoscViewModel.Maile) || maile.Contains(p.Aplikacja.Kandydat.Email))
                     && (string.IsNullOrEmpty(wiadomoscViewModel.Imie) || p.Aplikacja.Kandydat.Imie == wiadomoscViewModel.Imie)
                     && (string.IsNullOrEmpty(wiadomoscViewModel.Nazwisko) || p.Aplikacja.Kandydat.Nazwisko == wiadomoscViewModel.Nazwisko))
                 .Select(p => p.Aplikacja.Kandydat.Id)
+                .Distinct()
                 .ToListAsync();
 
             return ids;
@@ -116,44 +127,49 @@ namespace PWRekruter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Kierunek,Wydzial,Imie,Nazwisko,Maile,Zakwalifikowani,Tytul,Tresc")] WiadomoscViewModel wiadomoscView)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                List<int> ids = await GetIdOdbiorcyWiadomosciList(wiadomoscView);
-
-                if(ids.Count == 0)
-                {
-                    ViewBag.BrakKandydatow = true;
-                    ViewBag.UserType = "Rekruter";
-                    ViewBag.Wydzialy = await _context.Wydzialy.ToListAsync();
-                    ViewBag.Kierunki = await _context.Kierunki.ToListAsync();
-
-                    return View(wiadomoscView);
-                }
-
-                Wiadomosc wiadomosc = new Wiadomosc
-                {
-                    NadawcaId = _loginService.GetUserId(),
-                    Tytul = wiadomoscView.Tytul,
-                    Tresc = wiadomoscView.Tresc,
-                    Data = DateTime.Now,
-                };
-                _context.Add(wiadomosc);
-
-                foreach (int id in ids)
-                {
-                    OdbiorcaWiadomosci odbiorcaWiadomosci = new OdbiorcaWiadomosci 
-                    { 
-                        OdbiorcaId = id,
-                        Wiadomosc = wiadomosc
-                    };
-
-                    _context.Add(odbiorcaWiadomosci);
-                }
-                
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(wiadomoscView);
             }
-            return View(wiadomoscView);
+
+            List<int> idOdbiorcow = await GetIdOdbiorcyWiadomosciList(wiadomoscView);
+
+            if (idOdbiorcow.Count == 0)
+            {
+                ViewBag.BrakKandydatow = true;
+                ViewBag.UserType = "Rekruter";
+
+                var wydzialy = await _context.Wydzialy.ToListAsync();
+                var kierunki = await _context.Kierunki.ToListAsync();
+                ViewBag.Wydzialy = wydzialy;
+                ViewBag.Kierunki = kierunki;
+
+                return View(wiadomoscView);
+            }
+
+            Wiadomosc wiadomosc = new Wiadomosc
+            {
+                NadawcaId = _loginService.GetUserId(),
+                Tytul = wiadomoscView.Tytul,
+                Tresc = wiadomoscView.Tresc,
+                Data = DateTime.Now,
+                Odbiorcy = new Collection<OdbiorcaWiadomosci>()
+            };
+
+            foreach (int id in idOdbiorcow)
+            {
+                OdbiorcaWiadomosci odbiorcaWiadomosci = new OdbiorcaWiadomosci
+                {
+                    OdbiorcaId = id,
+                    Wiadomosc = wiadomosc
+                };
+
+                _context.Add(odbiorcaWiadomosci);
+            }
+            _context.Add(wiadomosc);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

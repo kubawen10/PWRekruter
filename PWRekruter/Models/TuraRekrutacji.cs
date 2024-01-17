@@ -12,6 +12,6 @@ namespace PWRekruter.Models
         public DateTime TerminSkladaniaAplikacji { get; set; }
         public DateTime TerminWnoszeniaOplatRekrutacyjnych {  get; set; }
         [AllowNull]
-        public List<Aplikacja>? Aplikacje {  get; set; }
+        public ICollection<Aplikacja> Aplikacje {  get; set; }
     }
 }

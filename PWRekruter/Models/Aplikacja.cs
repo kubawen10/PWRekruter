@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using System.Diagnostics.CodeAnalysis;
 
 namespace PWRekruter.Models
 {
@@ -12,7 +12,7 @@ namespace PWRekruter.Models
     public class Aplikacja
     {
         public long Id { get; set; }
-        public StatusAplikacji Status {  get; set; }
+        public StatusAplikacji Status { get; set; }
         public bool Oplacona { get; set; }
         public DateTime DataZlozenia { get; set; }
         public int IdKandydata { get; set; }
