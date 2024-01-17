@@ -275,3 +275,6 @@ nav {
     margin-top: 20px;
     margin-right: 10px;
 }
+.modal-backdrop {
+    z-index: -1;
+}

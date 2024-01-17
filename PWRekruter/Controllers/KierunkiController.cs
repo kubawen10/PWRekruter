@@ -201,9 +201,7 @@ namespace PWRekruter.Controllers
             {
                 kierunkiQuery = kierunkiQuery.Where(k => k.Nazwa.ToLower().Contains(SearchString.ToLower()));
             }
-
-            var przefiltrowaneKieruki = await kierunkiQuery.ToListAsync();
-            return View(przefiltrowaneKieruki);
+            return View(await kierunkiQuery.ToListAsync());
         }
 
         // GET: Kierunki/Create

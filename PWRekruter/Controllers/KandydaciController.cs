@@ -239,7 +239,7 @@ namespace PWRekruter.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteApplication(long id)
         {
-            Aplikacja aplikacja = await _context.Aplikacje.FirstOrDefaultAsync(a => a.Id == id);
+            Aplikacja aplikacja = await _context.Aplikacje.FindAsync(id);
             if (aplikacja == null)
             {
                 return NotFound();

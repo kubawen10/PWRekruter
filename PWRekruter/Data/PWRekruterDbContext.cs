@@ -24,7 +24,7 @@ namespace PWRekruter.Data
         public DbSet<Wydzial> Wydzialy { get; set; }
         public DbSet<ProgramStudiow> ProgramyStudiow { get; set; }
         public DbSet<ProgPunktowy> ProgiPunktowe {  get; set; }
-        public DbSet<Aplikacja> Aplikacje { get; set; }
+        public virtual DbSet<Aplikacja> Aplikacje { get; set; }
         public DbSet<Preferencja> Preferencje { get; set; }
         public DbSet<TuraRekrutacji> TuryRekrutacji { get; set; }
         public DbSet<Dokument> Dokumenty { get; set; }
