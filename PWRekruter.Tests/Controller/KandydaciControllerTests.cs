@@ -3,10 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using PWRekruter.Controllers;
 using PWRekruter.Data;
+using PWRekruter.Enums;
 using PWRekruter.Models;
 using PWRekruter.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -59,6 +62,7 @@ namespace PWRekruter.Tests.Controller
             var optionsBuilder = new DbContextOptionsBuilder<PWRekruterDbContext>();
             var context = new Mock<PWRekruterDbContext>(optionsBuilder.Options);
             var loginService = new Mock<ILoginService>();
+
             var controller = new KandydaciController(context.Object, loginService.Object);
             var mockSet = new Mock<DbSet<Kandydat>>();
             context.Setup(m => m.Kandydaci).Returns(mockSet.Object);
@@ -68,5 +72,62 @@ namespace PWRekruter.Tests.Controller
 
             var viewResult = Assert.IsType<NotFoundResult>(result);
         }
+
+        [Fact]
+        public void KandydaciController_DeleteApplicaton_ReturnsNotFound()
+        {
+            //Arrange
+            var optionsBuilder = new DbContextOptionsBuilder<PWRekruterDbContext>();
+            var mockContext = new Mock<PWRekruterDbContext>(optionsBuilder.Options);
+            var loginService = new Mock<ILoginService>();
+            var controller = new KandydaciController(mockContext.Object, loginService.Object);
+
+            var mockSet = new Mock<DbSet<Aplikacja>>();
+            int any = It.IsAny<int>();
+            mockContext.Setup(m => m.Aplikacje).Returns(mockSet.Object);
+            mockSet.Setup(m => m.Find(any)).Returns((Aplikacja)null);
+
+
+            
+
+            // Act
+            var result = controller.DeleteApplication(any);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void DeleteApplication_WithExistingId_DeletesApplicationAndRedirects()
+        {
+            // Arrange
+            var optionsBuilder = new DbContextOptionsBuilder<PWRekruterDbContext>();
+            var context = new Mock<PWRekruterDbContext>(optionsBuilder.Options);
+            var loginService = new Mock<ILoginService>();
+            var controller = new KandydaciController(context.Object, loginService.Object);
+            long existingApp = 1L;
+            var aplikacja = new Aplikacja
+            {
+                Id = 1L,
+                DataZlozenia = DateTime.Now,
+                IdKandydata = 1,
+                Oplacona = true,
+                Status = StatusAplikacji.Zlozona,
+                IdTuryRekrutacji = 1
+            };
+            var mockSet = new Mock<DbSet<Aplikacja>>();
+            context.Setup(m => m.Aplikacje).Returns(mockSet.Object);
+            mockSet.Setup(m => m.Find(existingApp)).Returns(aplikacja);
+            
+            // Act
+            var result = controller.DeleteApplication(existingApp);
+
+            // Assert
+            context.Verify(m => m.Aplikacje.Remove(aplikacja), Times.Once);
+            context.Verify(m => m.SaveChanges(), Times.Once);
+            Assert.IsType<RedirectToActionResult>(result);
+        }
+
+
     }
 }

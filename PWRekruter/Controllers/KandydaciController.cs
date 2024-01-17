@@ -237,15 +237,15 @@ namespace PWRekruter.Controllers
 
         // DELETE: Kandydaci/DeleteApplication/{id}
         [HttpDelete]
-        public async Task<IActionResult> DeleteApplication(long id)
+        public IActionResult DeleteApplication(long id)
         {
-            Aplikacja aplikacja = await _context.Aplikacje.FindAsync(id);
+            Aplikacja aplikacja = _context.Aplikacje.Find(id);
             if (aplikacja == null)
             {
                 return NotFound();
             }
             _context.Aplikacje.Remove(aplikacja);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Aplikacja));
         }
     }
