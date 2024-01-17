@@ -37,7 +37,10 @@
                 </a>
                 </td></tr>
             }
-            
+            @if (Model.Dokumenty.Count()==0)
+            {
+                <tr><td>Brak</td></tr>
+            }
              
             
         </table>
