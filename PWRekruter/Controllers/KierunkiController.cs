@@ -202,8 +202,8 @@ namespace PWRekruter.Controllers
                 kierunkiQuery = kierunkiQuery.Where(k => k.Nazwa.ToLower().Contains(SearchString.ToLower()));
             }
 
-            var kierunkiList = await kierunkiQuery.ToListAsync();
-            return View(kierunkiList);
+            var przefiltrowaneKieruki = await kierunkiQuery.ToListAsync();
+            return View(przefiltrowaneKieruki);
         }
 
         // GET: Kierunki/Create
@@ -241,7 +241,7 @@ namespace PWRekruter.Controllers
 
 			ViewBag.ProgramyStudiow = new List<SelectListItem>
 			{
-				new SelectListItem { Text = "Select an option", Value = string.Empty }
+				new SelectListItem { Text = "Wybierz opcję", Value = string.Empty }
 			};
 
 			ViewBag.ProgramyStudiow.AddRange(await _context.ProgramyStudiow.Select(p => new SelectListItem
