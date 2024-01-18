@@ -20,12 +20,12 @@ namespace PWRekruter.Data
         public DbSet<WynikMaturyOKE> WynikiMaturyOKE { get; set; }
         public DbSet<WynikPrzedmiotowy> WynikiPrzedmiotowe { get; set; }
 
-        public DbSet<Kierunek> Kierunki { get; set; }
-        public DbSet<Wydzial> Wydzialy { get; set; }
+        public virtual DbSet<Kierunek> Kierunki { get; set; }
+        public virtual DbSet<Wydzial> Wydzialy { get; set; }
         public DbSet<ProgramStudiow> ProgramyStudiow { get; set; }
         public DbSet<ProgPunktowy> ProgiPunktowe {  get; set; }
         public virtual DbSet<Aplikacja> Aplikacje { get; set; }
-        public DbSet<Preferencja> Preferencje { get; set; }
+        public virtual DbSet<Preferencja> Preferencje { get; set; }
         public DbSet<TuraRekrutacji> TuryRekrutacji { get; set; }
         public DbSet<Dokument> Dokumenty { get; set; }
         public DbSet<Specjalizacja> Specjalizacje { get; set; }        
