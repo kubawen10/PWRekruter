@@ -190,66 +190,67 @@ namespace PWRekruter.Controllers
         {
             return _context.Kierunki.Any(e => e.Id == id);
         }
-        public async Task<IActionResult> IndexAdm(string Symbol, string? SearchString)
+        public IActionResult IndexAdm(string Symbol, string? SearchString)
         {
             ViewBag.Symbol = Symbol;
-            var kierunkiQuery = _context.Kierunki.AsQueryable();
 
-            kierunkiQuery = kierunkiQuery.Where(k => k.SymbolWydzialu == Symbol);
+            var kierunki = _context.Kierunki.Where(k => k.SymbolWydzialu == Symbol);
 
             if (!string.IsNullOrEmpty(SearchString))
             {
-                kierunkiQuery = kierunkiQuery.Where(k => k.Nazwa.ToLower().Contains(SearchString.ToLower()));
+				kierunki = kierunki.Where(k => k.Nazwa.ToLower().Contains(SearchString.ToLower()));
             }
-            return View(await kierunkiQuery.ToListAsync());
+            return View(kierunki.ToList());
         }
 
         // GET: Kierunki/Create
-        public async Task<IActionResult> Create(string Symbol)
+        public IActionResult Create(string Symbol)
         {
             ViewBag.Symbol = Symbol;
-			ViewBag.ProgramyStudiow = new List<SelectListItem>
-            {
-	            new SelectListItem { Text = "Select an option", Value = string.Empty }
-            };
+            ViewBag.ProgramyStudiow = getProgramSelectList();
 
-			ViewBag.ProgramyStudiow.AddRange(await _context.ProgramyStudiow.Select(p => new SelectListItem
-			{
-				Text = p.Nazwa,
-				Value = p.Id.ToString()
-			}).ToListAsync());
 			return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(Kierunek kierunek)
+		public IActionResult Create(Kierunek kierunek)
         {
+            
             if (ModelState.IsValid)
             {
                 _context.Add(kierunek);
-                foreach (Specjalizacja spec in kierunek.Specjalizacje)
+                if (kierunek.Specjalizacje != null)
                 {
-                    _context.Add(spec);
+                    foreach (Specjalizacja spec in kierunek.Specjalizacje)
+                    {
+                        _context.Add(spec);
+                    }
                 }
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                
+                _context.SaveChanges();
+                return RedirectToAction(nameof(IndexAdm), new { symbol = kierunek.SymbolWydzialu });
             }
-			ViewBag.Symbol = kierunek.SymbolWydzialu;
+            ViewBag.Symbol = kierunek.SymbolWydzialu;
+            ViewBag.ProgramyStudiow = getProgramSelectList();
 
-			ViewBag.ProgramyStudiow = new List<SelectListItem>
-			{
-				new SelectListItem { Text = "Wybierz opcję", Value = string.Empty }
-			};
-
-			ViewBag.ProgramyStudiow.AddRange(await _context.ProgramyStudiow.Select(p => new SelectListItem
-			{
-				Text = p.Nazwa,
-				Value = p.Id.ToString()
-			}).ToListAsync());
-
-			return View(kierunek);
+            return View(kierunek);
         }
 
+
+        private List<SelectListItem> getProgramSelectList()
+        {
+            List<SelectListItem> programyStudiow = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Select an option", Value = string.Empty }
+            };
+            programyStudiow.AddRange(_context.ProgramyStudiow.Select(p => new SelectListItem
+            {
+                Text = p.Nazwa,
+                Value = p.Id.ToString()
+            }).ToList());
+
+            return programyStudiow;
+        }
     }
 }
