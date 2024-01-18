@@ -190,18 +190,17 @@ namespace PWRekruter.Controllers
         {
             return _context.Kierunki.Any(e => e.Id == id);
         }
-        public async Task<IActionResult> IndexAdm(string Symbol, string? SearchString)
+        public IActionResult IndexAdm(string Symbol, string? SearchString)
         {
             ViewBag.Symbol = Symbol;
-            var kierunkiQuery = _context.Kierunki.AsQueryable();
 
-            kierunkiQuery = kierunkiQuery.Where(k => k.SymbolWydzialu == Symbol);
+            var kierunki = _context.Kierunki.Where(k => k.SymbolWydzialu == Symbol);
 
             if (!string.IsNullOrEmpty(SearchString))
             {
-                kierunkiQuery = kierunkiQuery.Where(k => k.Nazwa.ToLower().Contains(SearchString.ToLower()));
+				kierunki = kierunki.Where(k => k.Nazwa.ToLower().Contains(SearchString.ToLower()));
             }
-            return View(await kierunkiQuery.ToListAsync());
+            return View(kierunki.ToList());
         }
 
         // GET: Kierunki/Create
