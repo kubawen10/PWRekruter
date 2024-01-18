@@ -132,6 +132,7 @@
 		<label asp-for="Opis" class="control-label"></label>
 		<textarea asp-for="Opis" class="form-control"></textarea>
 		<span asp-validation-for="Opis" class="text-danger"></span>
+			
 	</div>
 		<input type="hidden" asp-for="SymbolWydzialu" name="SymbolWydzialu" value="@ViewBag.Symbol" />
 
@@ -164,10 +165,12 @@
 					<div class="form-group">
 						<label>Nazwa</label>
 						<input type="text" name="Specjalizacje[${specjalizacjaCount}].Nazwa" class="form-control" />
+						<span asp-validation-for="Specjalizacje[${specjalizacjaCount}].Nazwa" class="text-danger"></span>
 					</div>
 					<div class="form-group ml-4">
 						<label>Symbol</label>
 						<input type="text" name="Specjalizacje[${specjalizacjaCount}].Symbol" class="form-control" />
+							<span asp-validation-for="Specjalizacje[${specjalizacjaCount}].Symbol" class="text-danger"></span>
 					</div>
 				</div>
 					<button type="button" onclick="removeSection('${sectionId}')" class="btn btn-outline-danger" style="margin-top: auto; margin-bottom: auto;"><i class="bi bi-trash3-fill"></i></button>
@@ -175,6 +178,7 @@
 				<div class="form-group">
 					<label>Opis</label>
 					<textarea name="Specjalizacje[${specjalizacjaCount}].Opis" class="form-control"></textarea>
+						<span asp-validation-for="Specjalizacje[${specjalizacjaCount}].Opis" class="text-danger"></span>
 				</div>
 				<hr/>
 			`;

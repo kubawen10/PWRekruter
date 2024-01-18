@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PWRekruter.DTO;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -180,30 +179,28 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Kandydaci/Aplikacja
-        public async Task<IActionResult> Aplikacja()
+        public IActionResult Aplikacja()
         {
             int kandydatId = _loginService.GetUserId();
-            Aplikacja aplikacja = await _context.Aplikacje
-                .FirstOrDefaultAsync(aplikacja => aplikacja.IdKandydata == kandydatId);
+            Aplikacja aplikacja = _context.Aplikacje
+                .FirstOrDefault(aplikacja => aplikacja.IdKandydata == kandydatId);
 
             if (aplikacja == null)
             {
                 return View();
             }
-            aplikacja.TuraRekrutacji = await _context.TuryRekrutacji
-                                       .Where(tura => tura.Id == aplikacja.IdTuryRekrutacji)
-                                       .FirstOrDefaultAsync();
-            aplikacja.Preferencje = await _context.Preferencje
+            aplikacja.TuraRekrutacji = _context.TuryRekrutacji.Find(aplikacja.IdTuryRekrutacji);
+            aplikacja.Preferencje = _context.Preferencje
                                    .Where(pref => pref.IdAplikacji == aplikacja.Id)
                                    .OrderBy(pref => pref.Priorytet)
-                                   .ToListAsync();
+                                   .ToList();
             
             foreach (var preferencja in aplikacja.Preferencje)
             {
-                preferencja.Kierunek = await _context.Kierunki.FirstOrDefaultAsync(k => k.Id == preferencja.IdKierunku);
+                preferencja.Kierunek =  _context.Kierunki.Find(preferencja.IdKierunku);
                 if (preferencja.IdWybranejSpecjalizacji != null)
                 {
-                    preferencja.WybranaSpecjalizacja = await _context.Specjalizacje.FirstOrDefaultAsync(s => s.Id == preferencja.IdWybranejSpecjalizacji);
+                    preferencja.WybranaSpecjalizacja = _context.Specjalizacje.Find(preferencja.IdWybranejSpecjalizacji);
                 }
             }
             return View(aplikacja);
@@ -213,7 +210,10 @@ namespace PWRekruter.Controllers
         [HttpPost]
         public IActionResult ReorderPrefs([FromBody] ReorderRequest request)
         {
-            Aplikacja aplikacja =  _context.Aplikacje.FirstOrDefault(a => a.Id == request.IdAplikacji);
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
+            Aplikacja aplikacja =  _context.Aplikacje.Find(request.IdAplikacji);
             List<Preferencja> preferencje = _context.Preferencje
                 .Where(pref => pref.IdAplikacji == request.IdAplikacji)
                 .ToList();
@@ -222,8 +222,8 @@ namespace PWRekruter.Controllers
 
             foreach (var pref in request.Priorytety.Keys)
             {
-                Preferencja Pref = preferencje.Where(p => p.Priorytet == pref).First();
-                NowePreferencje.Add(Pref, request.Priorytety[pref]);
+                Preferencja poprzedniaPref = preferencje.Where(p => p.Priorytet == pref).First();
+                NowePreferencje.Add(poprzedniaPref, request.Priorytety[pref]);
             }
             foreach (var pref in NowePreferencje.Keys)
             {
