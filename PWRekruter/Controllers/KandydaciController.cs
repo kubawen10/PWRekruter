@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using PWRekruter.DTO;
 
 namespace PWRekruter.Controllers
 {
@@ -208,7 +209,7 @@ namespace PWRekruter.Controllers
         }
         // POST: Kandydaci/ReorderPrefs
         [HttpPost]
-        public IActionResult ReorderPrefs([FromBody] ReorderRequest request)
+        public IActionResult ReorderPrefs([FromBody] ReorderRequestViewModel request)
         {
             if (!ModelState.IsValid) {
                 return BadRequest();
