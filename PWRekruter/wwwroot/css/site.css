@@ -192,7 +192,7 @@ nav {
     margin-bottom: 20px;
     
 }
-#pref-table td, #points-table th {
+#pref-table td, #pref-table th {
     padding: 10px;
     background-color: whitesmoke;
     border: 1px solid black;
