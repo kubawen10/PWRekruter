@@ -181,16 +181,27 @@ namespace PWRekruter.Tests.Controller
 
         [Fact]
         public async Task ChangeAppResult_UpdatesResultAndReturnsContentForValidInput()
-        {
-            
+        {   
             var result = await _controller.ChangeAppResult(1, "akceptuj");
-            
             Assert.IsType<ContentResult>(result);
             var contentResult = (ContentResult)result;
             Assert.Equal("Zapisano zmiany", contentResult.Content);
-
             var updatedPref = _context.Preferencje.FirstOrDefault(p => p.Id == 1);
-            Assert.Equal(WynikAplikacji.Zakwalifikowano,updatedPref.Wynik); 
+            Assert.Equal(WynikAplikacji.Zakwalifikowano,updatedPref.Wynik);
+
+            result = await _controller.ChangeAppResult(2, "odrzuc");
+            Assert.IsType<ContentResult>(result);
+            contentResult = (ContentResult)result;
+            Assert.Equal("Zapisano zmiany", contentResult.Content);
+            updatedPref = _context.Preferencje.FirstOrDefault(p => p.Id == 2);
+            Assert.Equal(WynikAplikacji.Odrzucono,updatedPref.Wynik);
+
+            result = await _controller.ChangeAppResult(1, "usun");
+            Assert.IsType<ContentResult>(result);
+            contentResult = (ContentResult)result;
+            Assert.Equal("Zapisano zmiany", contentResult.Content);
+            updatedPref = _context.Preferencje.FirstOrDefault(p => p.Id == 1);
+            Assert.Null(updatedPref.Wynik);
         }
     }
 }
