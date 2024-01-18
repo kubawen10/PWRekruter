@@ -108,7 +108,7 @@ namespace PWRekruter.Controllers
                 {
                     return Content("Wybrana pozycja nie posiada wyniku");
                 }
-                else if ((option == "akceptuj" && pref.Wynik==WynikAplikacji.Zakwalfikowano)||
+                else if ((option == "akceptuj" && pref.Wynik==WynikAplikacji.Zakwalifikowano)||
                     (option == "odrzuc" && pref.Wynik==WynikAplikacji.Odrzucono))
                 {
                     return Content("Pozycja posiada już wybrany wynik");
@@ -121,7 +121,7 @@ namespace PWRekruter.Controllers
                             pref.Wynik=null;
                             break;
                         case "akceptuj":
-                            pref.Wynik = WynikAplikacji.Zakwalfikowano;
+                            pref.Wynik = WynikAplikacji.Zakwalifikowano;
                             break;
                         case "odrzuc":
                             pref.Wynik = WynikAplikacji.Odrzucono;

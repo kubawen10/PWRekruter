@@ -5,7 +5,7 @@ namespace PWRekruter.Models
 {
     public enum WynikAplikacji
     {
-        Zakwalfikowano,
+        Zakwalifikowano,
         Odrzucono
     }
     public class Preferencja
