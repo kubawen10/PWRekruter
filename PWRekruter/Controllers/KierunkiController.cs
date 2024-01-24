@@ -27,24 +27,27 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Kierunki
-        public async Task<IActionResult> Index(string nazwa, string wydzial, StopienStudiow? stopien, 
+        public IActionResult Index(string nazwa, string wydzial, StopienStudiow? stopien, 
             FormaStudiow? forma, string dyscyplina)
         {
-            var wydzialy = await _context.Wydzialy.ToListAsync();
-            ViewBag.Wydzialy = wydzialy;
-            var dyscypliny = await _context.Kierunki
-                .Select(k => k.DyscyplinaNaukowa)
-                .Distinct() 
-                .ToListAsync();
-            ViewBag.Dyscypliny = dyscypliny;
-
-            var kierunki = await _context.Kierunki
+            
+            var kierunki = _context.Kierunki
                 .Where(k => string.IsNullOrEmpty(nazwa) || k.Nazwa.ToLower().Contains(nazwa.ToLower()))
                 .Where(k => string.IsNullOrEmpty(wydzial) || k.SymbolWydzialu == wydzial)
                 .Where(k => !stopien.HasValue || k.Stopien == stopien)
                 .Where(k => !forma.HasValue || k.Forma == forma)
                 .Where(k => string.IsNullOrEmpty(dyscyplina) || k.DyscyplinaNaukowa ==dyscyplina)
-                .ToListAsync();
+                .ToList();
+
+            var wydzialy = _context.Wydzialy.ToList();
+
+            var dyscypliny = _context.Kierunki
+                .Select(k => k.DyscyplinaNaukowa)
+                .Distinct()
+                .ToList();
+
+            ViewBag.Dyscypliny = dyscypliny;
+            ViewBag.Wydzialy = wydzialy;
 
             return View(kierunki);
         }
@@ -61,9 +64,9 @@ namespace PWRekruter.Controllers
             return DownloadFile(programStudiow.ProgramSciezka);
         }
 
-        public async Task<IActionResult> PobierzPlanStudiow(long id)
+        public  IActionResult PobierzPlanStudiow(long id)
         {
-            var programStudiow = await _context.ProgramyStudiow.FirstOrDefaultAsync(p => p.Id == id);
+            var programStudiow = _context.ProgramyStudiow.FirstOrDefault(p => p.Id == id);
 
             if (programStudiow == null)
             {
@@ -86,16 +89,16 @@ namespace PWRekruter.Controllers
 
 
         // GET: Kierunki/Details/5
-        public async Task<IActionResult> Details(long? id)
+        public IActionResult Details(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var kierunek = await _context.Kierunki
+            var kierunek = _context.Kierunki
                 .Include(k => k.HistoryczneProgi)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefault(m => m.Id == id);
             if (kierunek == null)
             {
                 return NotFound();
