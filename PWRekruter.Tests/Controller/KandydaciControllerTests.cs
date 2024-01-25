@@ -74,9 +74,8 @@ namespace PWRekruter.Tests.Controller
         }
 
         [Fact]
-        public void KandydaciController_DeleteApplicaton_ReturnsNotFound()
+        public void DeleteApplicaton_WithNonExistingId_ReturnsNotFound()
         {
-            //Arrange
             var optionsBuilder = new DbContextOptionsBuilder<PWRekruterDbContext>();
             var mockContext = new Mock<PWRekruterDbContext>(optionsBuilder.Options);
             var loginService = new Mock<ILoginService>();
@@ -86,21 +85,15 @@ namespace PWRekruter.Tests.Controller
             int any = It.IsAny<int>();
             mockContext.Setup(m => m.Aplikacje).Returns(mockSet.Object);
             mockSet.Setup(m => m.Find(any)).Returns((Aplikacja)null);
-
-
             
-
-            // Act
             var result = controller.DeleteApplication(any);
 
-            // Assert
             Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
         public void DeleteApplication_WithExistingId_DeletesApplicationAndRedirects()
         {
-            // Arrange
             var optionsBuilder = new DbContextOptionsBuilder<PWRekruterDbContext>();
             var context = new Mock<PWRekruterDbContext>(optionsBuilder.Options);
             var loginService = new Mock<ILoginService>();
@@ -119,10 +112,8 @@ namespace PWRekruter.Tests.Controller
             context.Setup(m => m.Aplikacje).Returns(mockSet.Object);
             mockSet.Setup(m => m.Find(existingApp)).Returns(aplikacja);
             
-            // Act
             var result = controller.DeleteApplication(existingApp);
 
-            // Assert
             context.Verify(m => m.Aplikacje.Remove(aplikacja), Times.Once);
             context.Verify(m => m.SaveChanges(), Times.Once);
             Assert.IsType<RedirectToActionResult>(result);

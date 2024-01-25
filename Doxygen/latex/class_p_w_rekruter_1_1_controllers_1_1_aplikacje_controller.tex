@@ -1,0 +1,49 @@
+\doxysection{PWRekruter.\+Controllers.\+Aplikacje\+Controller Class Reference}
+\hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller}{}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller}\index{PWRekruter.Controllers.AplikacjeController@{PWRekruter.Controllers.AplikacjeController}}
+Inheritance diagram for PWRekruter.\+Controllers.\+Aplikacje\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a52495ea64ffffc9e7d6826ab88ef8b3f}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a52495ea64ffffc9e7d6826ab88ef8b3f} 
+{\bfseries Aplikacje\+Controller} (\mbox{\hyperlink{class_p_w_rekruter_1_1_data_1_1_p_w_rekruter_db_context}{PWRekruter\+Db\+Context}} context, IWeb\+Host\+Environment hosting\+Environment)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_afe08fcc45b67fa77816c6fac8f8157e7}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_afe08fcc45b67fa77816c6fac8f8157e7} 
+async Task$<$ IAction\+Result $>$ {\bfseries Index} (long? id, string kandydat, string wydzial, long? kierunek, Status\+Aplikacji? status)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_adbb56acd46010f598bace90c1f99f11f}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_adbb56acd46010f598bace90c1f99f11f} 
+async Task$<$ IAction\+Result $>$ {\bfseries Details} (long? id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a5628986357382b3e8f22b5fcd9ca99b3}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a5628986357382b3e8f22b5fcd9ca99b3} 
+async Task$<$ IAction\+Result $>$ {\bfseries Download\+Document} (long id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_aa561f07a9b15af1937dbda2d7cc970d2}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_aa561f07a9b15af1937dbda2d7cc970d2} 
+async Task$<$ IAction\+Result $>$ {\bfseries Change\+App\+Result} (int id, string option)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_ad5cc11c365a2d0c50d0cda4200d50d6a}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_ad5cc11c365a2d0c50d0cda4200d50d6a} 
+IAction\+Result {\bfseries Create} ()
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a37ec4503eda50aafd2569b1089bf9045}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a37ec4503eda50aafd2569b1089bf9045} 
+async Task$<$ IAction\+Result $>$ {\bfseries Create} (\mbox{[}Bind("{}Id,Status,Oplacona,Data\+Zlozenia,Id\+Kandydata"{})\mbox{]} \mbox{\hyperlink{class_p_w_rekruter_1_1_models_1_1_aplikacja}{Aplikacja}} aplikacja)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a96e7e2a867754b2a11bebe80cdde3b83}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a96e7e2a867754b2a11bebe80cdde3b83} 
+async Task$<$ IAction\+Result $>$ {\bfseries Edit} (long? id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a9e45e24c81a47cb2c23cffbd73434eb3}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a9e45e24c81a47cb2c23cffbd73434eb3} 
+async Task$<$ IAction\+Result $>$ {\bfseries Edit} (long id, \mbox{[}Bind("{}Id,Status,Oplacona,Data\+Zlozenia,Id\+Kandydata"{})\mbox{]} \mbox{\hyperlink{class_p_w_rekruter_1_1_models_1_1_aplikacja}{Aplikacja}} aplikacja)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a21a36ca2722de161ef8047c40d14e829}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a21a36ca2722de161ef8047c40d14e829} 
+async Task$<$ IAction\+Result $>$ {\bfseries Delete} (long? id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a98f8ee25f097a5a945f71c53291f0e67}\label{class_p_w_rekruter_1_1_controllers_1_1_aplikacje_controller_a98f8ee25f097a5a945f71c53291f0e67} 
+async Task$<$ IAction\+Result $>$ {\bfseries Delete\+Confirmed} (long id)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+PWRekruter/\+Controllers/Aplikacje\+Controller.\+cs\end{DoxyCompactItemize}

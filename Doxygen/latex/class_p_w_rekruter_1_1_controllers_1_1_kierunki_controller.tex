@@ -1,0 +1,52 @@
+\doxysection{PWRekruter.\+Controllers.\+Kierunki\+Controller Class Reference}
+\hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller}{}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller}\index{PWRekruter.Controllers.KierunkiController@{PWRekruter.Controllers.KierunkiController}}
+Inheritance diagram for PWRekruter.\+Controllers.\+Kierunki\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ab4d5f4fa9be8313a984baa2eb77da3d5}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ab4d5f4fa9be8313a984baa2eb77da3d5} 
+{\bfseries Kierunki\+Controller} (\mbox{\hyperlink{class_p_w_rekruter_1_1_data_1_1_p_w_rekruter_db_context}{PWRekruter\+Db\+Context}} context, IWeb\+Host\+Environment hosting\+Environment)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_abb0443b8d9a6f4e2049f734e47250f3e}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_abb0443b8d9a6f4e2049f734e47250f3e} 
+async Task$<$ IAction\+Result $>$ {\bfseries Index} (string nazwa, string wydzial, Stopien\+Studiow? stopien, Forma\+Studiow? forma, string dyscyplina)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ad1d8fb13ffc2f99c268fe943f2f30375}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ad1d8fb13ffc2f99c268fe943f2f30375} 
+async Task$<$ IAction\+Result $>$ {\bfseries Pobierz\+Program\+Studiow} (long id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a2010e5f29bc2caa24f89c20dd65fe1ec}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a2010e5f29bc2caa24f89c20dd65fe1ec} 
+async Task$<$ IAction\+Result $>$ {\bfseries Pobierz\+Plan\+Studiow} (long id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a1934724756369b97273297e248aaec89}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a1934724756369b97273297e248aaec89} 
+async Task$<$ IAction\+Result $>$ {\bfseries Details} (long? id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a139d3d027df6658f4b21a58b653d4263}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a139d3d027df6658f4b21a58b653d4263} 
+async Task$<$ IAction\+Result $>$ {\bfseries Edit} (long? id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ac047b26953577343210a820fc16e7c64}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ac047b26953577343210a820fc16e7c64} 
+async Task$<$ IAction\+Result $>$ {\bfseries Edit} (long id, \mbox{[}Bind("{}Id,Skrot,Nazwa,Stopien,Tryb,Forma,Czas\+Trwania,Dyscyplina\+Naukowa,Jezyk\+Wykladowy,Profil,Czesne,Czesne\+Dla\+Cudzoziemcow,Liczba\+Miejsc,Oplata\+Rekrutacyjna,Opis"{})\mbox{]} \mbox{\hyperlink{class_p_w_rekruter_1_1_models_1_1_kierunek}{Kierunek}} kierunek)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ac8a3a8bcb126ad14bc252fe1134fc1d6}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ac8a3a8bcb126ad14bc252fe1134fc1d6} 
+async Task$<$ IAction\+Result $>$ {\bfseries Delete} (long? id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ab565c4d2e47763413997cb085756f6f3}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_ab565c4d2e47763413997cb085756f6f3} 
+async Task$<$ IAction\+Result $>$ {\bfseries Delete\+Confirmed} (long id)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_acce6f74f03798eac08cc339ed4ac1e52}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_acce6f74f03798eac08cc339ed4ac1e52} 
+IAction\+Result {\bfseries Index\+Adm} (string Symbol, string? Search\+String)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a036c3c1bae2c33b31417708f29c75cd6}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a036c3c1bae2c33b31417708f29c75cd6} 
+IAction\+Result {\bfseries Create} (string Symbol)
+\item 
+\Hypertarget{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a96d1ef9d8a488078b9110da7ea95a241}\label{class_p_w_rekruter_1_1_controllers_1_1_kierunki_controller_a96d1ef9d8a488078b9110da7ea95a241} 
+IAction\+Result {\bfseries Create} (\mbox{\hyperlink{class_p_w_rekruter_1_1_models_1_1_kierunek}{Kierunek}} kierunek)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+PWRekruter/\+Controllers/Kierunki\+Controller.\+cs\end{DoxyCompactItemize}
