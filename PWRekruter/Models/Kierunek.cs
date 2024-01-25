@@ -27,7 +27,7 @@ namespace PWRekruter.Models
 		[NotNull]
 		public FormaStudiow Forma { get; set; }
         [Display(Name ="Czas trwania")]
-        [Range(1, 10, ErrorMessage = "Czas trwania jest poza dopuszczalnym zakresem")]
+        [Range(1, 12, ErrorMessage = "Czas trwania jest poza dopuszczalnym zakresem")]
 		[NotNull]
 		public short CzasTrwania { get; set; }
         [Display(Name ="Dyscyplina naukowa")]

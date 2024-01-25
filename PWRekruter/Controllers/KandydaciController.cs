@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PWRekruter.Data;
 using PWRekruter.Enums;
 using PWRekruter.Models;
 using PWRekruter.Services;
@@ -13,6 +12,8 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using PWRekruter.DTO;
+using PWRekruter.Data;
+using System;
 
 namespace PWRekruter.Controllers
 {
@@ -244,6 +245,10 @@ namespace PWRekruter.Controllers
             if (aplikacja == null)
             {
                 return NotFound();
+            }
+            if (aplikacja.TuraRekrutacji.TerminSkladaniaAplikacji < DateTime.Now)
+            {
+                return BadRequest();
             }
             _context.Aplikacje.Remove(aplikacja);
             _context.SaveChanges();

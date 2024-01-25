@@ -27,7 +27,10 @@
 	<div class="d-flex d-row justify-content-between">
 		<div class="form-group ">
 			<label asp-for="Stopien" class="control-label"></label>
-			<select asp-for="Stopien" class="form-control" asp-items="Html.GetEnumSelectList<StopienStudiow>()"></select>
+			<select asp-for="Stopien" class="form-control" >
+					<option value="@StopienStudiow.Istopien">I stopień</option>
+					<option value="@StopienStudiow.IIstopien">II stopień</option>
+			</select>
 			<span asp-validation-for="Stopien" class="text-danger"></span>
 		</div>
 		<div class="form-group">
@@ -110,6 +113,7 @@
 				<span class="input-group-text" id="tuition-foreign-addon">€</span>
 			</div>
 			<span asp-validation-for="CzesneDlaCudzoziemcow" class="text-danger"></span>
+			
 		</div>
 	</div>
 	<div class="d-flex d-row">
@@ -117,6 +121,7 @@
 			<label asp-for="LiczbaMiejsc" class="control-label"></label>
 			<input asp-for="LiczbaMiejsc" class="form-control" />
 			<span asp-validation-for="LiczbaMiejsc" class="text-danger"></span>
+			
 		</div>
 		<div class="form-group ml-4">
 			<label asp-for="OplataRekrutacyjna" class="control-label"></label>
@@ -137,7 +142,7 @@
 		<input type="hidden" asp-for="SymbolWydzialu" name="SymbolWydzialu" value="@ViewBag.Symbol" />
 
 	<div class="form-group d-flex d-row justify-content-end">
-		<a class="btn btn-outline-secondary" asp-action="Index">Wróć</a>
+			<a class="btn btn-outline-secondary" asp-action="IndexAdm" asp-route-Symbol="@ViewBag.Symbol">Wróć</a>
 			<input class="ml-4 btn btn-primary" type="submit" value="Dodaj"/>
 	</div>
 </form>
@@ -165,12 +170,12 @@
 					<div class="form-group">
 						<label>Nazwa</label>
 						<input type="text" name="Specjalizacje[${specjalizacjaCount}].Nazwa" class="form-control" />
-						<span asp-validation-for="Specjalizacje[${specjalizacjaCount}].Nazwa" class="text-danger"></span>
+						<span asp-validation-for="Specjalizacje.ToArray()[${specjalizacjaCount}].Nazwa" class="text-danger"></span>
 					</div>
 					<div class="form-group ml-4">
 						<label>Symbol</label>
 						<input type="text" name="Specjalizacje[${specjalizacjaCount}].Symbol" class="form-control" />
-							<span asp-validation-for="Specjalizacje[${specjalizacjaCount}].Symbol" class="text-danger"></span>
+						<span asp-validation-for="Specjalizacje.ToArray()[${specjalizacjaCount}].Symbol" class="text-danger"></span>
 					</div>
 				</div>
 					<button type="button" onclick="removeSection('${sectionId}')" class="btn btn-outline-danger" style="margin-top: auto; margin-bottom: auto;"><i class="bi bi-trash3-fill"></i></button>
@@ -178,7 +183,7 @@
 				<div class="form-group">
 					<label>Opis</label>
 					<textarea name="Specjalizacje[${specjalizacjaCount}].Opis" class="form-control"></textarea>
-						<span asp-validation-for="Specjalizacje[${specjalizacjaCount}].Opis" class="text-danger"></span>
+					<span asp-validation-for="Specjalizacje.ToArray()[${specjalizacjaCount}].Opis" class="text-danger"></span>
 				</div>
 				<hr/>
 			`;

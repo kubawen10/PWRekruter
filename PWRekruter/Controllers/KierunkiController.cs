@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PWRekruter.Data;
 using PWRekruter.Models;
 using PWRekruter.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.CodeAnalysis;
+using PWRekruter.Data;
 
 namespace PWRekruter.Controllers
 {
@@ -242,7 +242,7 @@ namespace PWRekruter.Controllers
         {
             List<SelectListItem> programyStudiow = new List<SelectListItem>
             {
-                new SelectListItem { Text = "Select an option", Value = string.Empty }
+                new SelectListItem { Text = "Wybierz opcję", Value = string.Empty }
             };
             programyStudiow.AddRange(_context.ProgramyStudiow.Select(p => new SelectListItem
             {
