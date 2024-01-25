@@ -1,4 +1,5 @@
 ﻿@model PWRekruter.Models.Aplikacja
+@using PWRekruter.Enums
 
 @{
     ViewData["Title"] = "Details";
@@ -8,7 +9,7 @@
 
 <div>
     <h3 class="app-header">Aplikacja @Html.DisplayFor(model => model.Id)</h3>
-    <h6 class="app-header">@Html.DisplayNameFor(model => model.Status): @Html.DisplayFor(model => model.Status)</h6>
+    <h6 class="app-header">@Html.DisplayNameFor(model => model.Status): @Model.Status.GetEnumLabel()</h6>
     <hr /> 
 </div>
 <div id="app-details">

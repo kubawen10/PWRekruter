@@ -1,4 +1,5 @@
 ﻿@model PWRekruter.Models.Kierunek
+@using PWRekruter.Enums
 
 @{
     ViewData["Title"] = "Details";
@@ -21,7 +22,7 @@
 
 <div class="details-block" id="details">
     <div class="detail-label">@Html.DisplayNameFor(model=>model.Stopien)</div>
-    <p>@Html.DisplayFor(model=>model.Stopien)</p>
+    <p>@Model.Stopien.GetEnumLabel()</p>
     <div class="detail-label">@Html.DisplayNameFor(model=>model.Forma)</div>
     <p>@Html.DisplayFor(model=>model.Forma)</p>
     <div class="detail-label">@Html.DisplayNameFor(model=>model.CzasTrwania)</div>

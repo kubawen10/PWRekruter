@@ -25,19 +25,9 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Aplikacje
-        public async Task<IActionResult> Index(long? id, string kandydat, string wydzial, long? kierunek, 
+        public IActionResult Index(long? id, string kandydat, string wydzial, long? kierunek, 
             StatusAplikacji? status)
         {
-            var wydzialy = await _context.Wydzialy.ToListAsync();
-            var kierunki = await _context.Kierunki.ToListAsync();
-            ViewBag.Wydzialy = wydzialy;
-            ViewBag.Kierunki = kierunki;
-            /*
-            if(id==null && string.IsNullOrEmpty(kandydat) && string.IsNullOrEmpty(wydzial) && kierunek==null
-                && !status.HasValue)
-            {
-                return View(new List<Aplikacja>());
-            }*/
 
             var aplikacje = _context.Aplikacje.Include(a => a.Kandydat)
                     .Include(a => a.Preferencje).ThenInclude(p => p.Kierunek)
@@ -48,25 +38,31 @@ namespace PWRekruter.Controllers
                         a.Preferencje.Any(p => p.Kierunek.Wydzial.Symbol == wydzial))
                     .Where(a => kierunek==null ||
                         a.Preferencje.Any(p => p.Kierunek.Id == kierunek))
-                    .Where(a => !status.HasValue || a.Status==status);
-           
-            return View(await aplikacje.ToListAsync());
+                    .Where(a => !status.HasValue || a.Status==status)
+                    .ToList();
+
+            var wydzialy = _context.Wydzialy.ToList();
+            var kierunki = _context.Kierunki.ToList();
+            ViewBag.Wydzialy = wydzialy;
+            ViewBag.Kierunki = kierunki;
+
+            return View(aplikacje);
         }
 
         // GET: Aplikacje/Details/5
-        public async Task<IActionResult> Details(long? id)
+        public IActionResult Details(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var aplikacja = await _context.Aplikacje
+            var aplikacja = _context.Aplikacje
                 .Include(a => a.Kandydat)
                 .Include(a => a.Dokumenty)
                 .Include(a => a.Preferencje)
                 .ThenInclude(p => p.Kierunek)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefault(m => m.Id == id);
             if (aplikacja == null)
             {
                 return NotFound();
@@ -75,9 +71,9 @@ namespace PWRekruter.Controllers
             return View(aplikacja);
         }
 
-        public async Task<IActionResult> DownloadDocument(long id)
+        public IActionResult DownloadDocument(long id)
         {
-            var dokument = await _context.Dokumenty.FirstOrDefaultAsync(d => d.Id == id);
+            var dokument = _context.Dokumenty.FirstOrDefault(d => d.Id == id);
 
             if (dokument == null)
             {
@@ -98,10 +94,10 @@ namespace PWRekruter.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeAppResult(int id, string option)
+        public IActionResult ChangeAppResult(int id, string option)
         {
-            var pref = await _context.Preferencje
-                .FirstOrDefaultAsync(a => a.Id==id);
+            var pref = _context.Preferencje
+                .FirstOrDefault(a => a.Id==id);
             if (pref != null)
             {
                 if (option == "usun" && pref.Wynik == null)
@@ -115,24 +111,34 @@ namespace PWRekruter.Controllers
                 }
                 else
                 {
-                    switch (option)
-                    {
-                        case "usun":
-                            pref.Wynik=null;
-                            break;
-                        case "akceptuj":
-                            pref.Wynik = WynikAplikacji.Zakwalifikowano;
-                            break;
-                        case "odrzuc":
-                            pref.Wynik = WynikAplikacji.Odrzucono;
-                            break;
-                    }
+                    SetNewResult(pref, option);
                     _context.SaveChanges();
                     return Content("Zapisano zmiany");
                 }
             }
+            else
+            {
+                NotFound();
+            }
             
             return RedirectToAction("Details");
+        }
+
+        private void SetNewResult(Preferencja pref, string option)
+        {
+            switch (option)
+            {
+                case "usun":
+                    pref.Wynik=null;
+                    break;
+                case "akceptuj":
+                    pref.Wynik = WynikAplikacji.Zakwalifikowano;
+                    break;
+                case "odrzuc":
+                    pref.Wynik = WynikAplikacji.Odrzucono;
+                    break;
+            }
+            
         }
 
         // GET: Aplikacje/Create

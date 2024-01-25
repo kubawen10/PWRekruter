@@ -158,45 +158,45 @@ namespace PWRekruter.Tests.Controller
 
 
         [Fact]
-        public async Task Index_ReturnsViewResultAplikacjeFilteredByName()
+        public void Index_ReturnsViewResultAplikacjeFilteredByName()
         {
-            var result = await _controller.Index(null, "Nowak", "", null, null);
+            var result =  _controller.Index(null, "Nowak", "", null, null);
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IEnumerable<Aplikacja>>(viewResult.ViewData.Model);
             Assert.Single(model);
             Assert.Equal(1, model.First().Id);
 
-            result = await _controller.Index(null, "", "", null, null);
+            result = _controller.Index(null, "", "", null, null);
             viewResult = Assert.IsType<ViewResult>(result);
             model = Assert.IsAssignableFrom<IEnumerable<Aplikacja>>(viewResult.ViewData.Model);
             Assert.Equal(2, model.Count());
             var uniqueIds = new HashSet<long>(model.Select(aplikacja => aplikacja.Id));
             Assert.True(uniqueIds.SetEquals(new HashSet<long> { 1, 2 }));
 
-            result = await _controller.Index(null, "Jakub", "", null, null);
+            result = _controller.Index(null, "Jakub", "", null, null);
             viewResult = Assert.IsType<ViewResult>(result);
             model = Assert.IsAssignableFrom<IEnumerable<Aplikacja>>(viewResult.ViewData.Model);
             Assert.Empty(model);
         }
 
         [Fact]
-        public async Task ChangeAppResult_UpdatesResultAndReturnsContentForValidInput()
+        public void ChangeAppResult_UpdatesResultAndReturnsContentForValidInput()
         {   
-            var result = await _controller.ChangeAppResult(1, "akceptuj");
+            var result =  _controller.ChangeAppResult(1, "akceptuj");
             Assert.IsType<ContentResult>(result);
             var contentResult = (ContentResult)result;
             Assert.Equal("Zapisano zmiany", contentResult.Content);
             var updatedPref = _context.Preferencje.FirstOrDefault(p => p.Id == 1);
             Assert.Equal(WynikAplikacji.Zakwalifikowano,updatedPref.Wynik);
 
-            result = await _controller.ChangeAppResult(2, "odrzuc");
+            result = _controller.ChangeAppResult(2, "odrzuc");
             Assert.IsType<ContentResult>(result);
             contentResult = (ContentResult)result;
             Assert.Equal("Zapisano zmiany", contentResult.Content);
             updatedPref = _context.Preferencje.FirstOrDefault(p => p.Id == 2);
             Assert.Equal(WynikAplikacji.Odrzucono,updatedPref.Wynik);
 
-            result = await _controller.ChangeAppResult(1, "usun");
+            result = _controller.ChangeAppResult(1, "usun");
             Assert.IsType<ContentResult>(result);
             contentResult = (ContentResult)result;
             Assert.Equal("Zapisano zmiany", contentResult.Content);
