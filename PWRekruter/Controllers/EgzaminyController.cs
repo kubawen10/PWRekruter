@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using PWRekruter.Data;
 using PWRekruter.Enums;
 using PWRekruter.Models;
@@ -9,11 +7,8 @@ using PWRekruter.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace PWRekruter.Controllers
 {
@@ -65,11 +60,11 @@ namespace PWRekruter.Controllers
             }
         }
 
-        public async Task<IActionResult> OlimpiadaForm()
+        public IActionResult OlimpiadaForm()
         {
 			int kandydatId = _loginService.GetUserId();
 
-            List<WynikOlimpiady> olimpiady = await _context.WynikiOlimpiady.Where(w => w.KandydatId == kandydatId).ToListAsync();
+            List<WynikOlimpiady> olimpiady = _context.WynikiOlimpiady.Where(w => w.KandydatId == kandydatId).ToList();
 
 			foreach (Olimpiada olimpiada in Enum.GetValues(typeof(Olimpiada)))
 			{
@@ -84,11 +79,11 @@ namespace PWRekruter.Controllers
 			return PartialView(olimpiady);
         }
 
-        public async Task<IActionResult> MaturaOkeForm()
+        public IActionResult MaturaOkeForm()
         {
 			int kandydatId = _loginService.GetUserId();
 
-            List<WynikPrzedmiotowy> wynikiPrzedmiotowe = await _context.WynikiPrzedmiotowe.Where(w => w.WynikMaturyOKE.KandydatId == kandydatId).ToListAsync();
+            List<WynikPrzedmiotowy> wynikiPrzedmiotowe =_context.WynikiPrzedmiotowe.Where(w => w.WynikMaturyOKE.KandydatId == kandydatId).ToList();
 
             foreach (TypPrzedmiotu typPrzedmiotu in Enum.GetValues(typeof(TypPrzedmiotu)))
             {
@@ -107,12 +102,12 @@ namespace PWRekruter.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditOlimpiada(IList<WynikOlimpiady> wyniki)
+        public IActionResult EditOlimpiada(IList<WynikOlimpiady> wyniki)
         {
 			foreach (var wynik in wyniki)
 			{
-				var istniejacyWynik = await _context.WynikiOlimpiady
-						.FirstOrDefaultAsync(w => w.Id == wynik.Id);
+				var istniejacyWynik = _context.WynikiOlimpiady
+						.FirstOrDefault(w => w.Id == wynik.Id);
 
 				if (wynik.TytulOlimpijczyka != null && istniejacyWynik != null)
 				{
@@ -128,15 +123,15 @@ namespace PWRekruter.Controllers
 				}
 			}
 
-			await _context.SaveChangesAsync();
+			_context.SaveChanges();
 			return RedirectToAction(nameof(KandydaciController.Index), "Kandydaci");
         }
 
 		[HttpPost]
-		public async Task<IActionResult> EditMaturaOke(IList<WynikPrzedmiotowy> wyniki)
+		public IActionResult EditMaturaOke(IList<WynikPrzedmiotowy> wyniki)
 		{
             int kandydatId = _loginService.GetUserId();
-			WynikMaturyOKE istniejaceWynikiMaturyOke = await _context.WynikiMaturyOKE.Where(w => w.KandydatId == kandydatId).Include(w=>w.WynikiPrzedmiotowe).FirstOrDefaultAsync();
+			WynikMaturyOKE istniejaceWynikiMaturyOke = _context.WynikiMaturyOKE.Where(w => w.KandydatId == kandydatId).Include(w=>w.WynikiPrzedmiotowe).FirstOrDefault();
 
             if (istniejaceWynikiMaturyOke == null)
             {

@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PWRekruter.Data;
 using PWRekruter.Enums;
 using PWRekruter.Models;
 using PWRekruter.Services;
 using PWRekruter.ViewModels;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.IO;
-using System.Net.Http;
-using System.Text;
 using PWRekruter.DTO;
 using PWRekruter.Data;
 using System;
@@ -81,11 +78,11 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Kandydaci/Edit/5
-        public async Task<IActionResult> Edit()
+        public IActionResult Edit()
         {
             int kandydatId = _loginService.GetUserId();
 
-            var kandydat = await _context.Kandydaci.FindAsync(kandydatId);
+            var kandydat = _context.Kandydaci.Find(kandydatId);
             if (kandydat == null)
             {
                 return NotFound();
@@ -114,12 +111,12 @@ namespace PWRekruter.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("Imie,DrugieImie,Nazwisko,Pesel,Plec,DataUrodzenia,Panstwo,KodPocztowy,Miejscowosc,Ulica,NumerBudynku,NumerMieszkania")] KandydatViewModel kandydatView)
+        public IActionResult Edit([Bind("Imie,DrugieImie,Nazwisko,Pesel,Plec,DataUrodzenia,Panstwo,KodPocztowy,Miejscowosc,Ulica,NumerBudynku,NumerMieszkania")] KandydatViewModel kandydatView)
         {
             if (ModelState.IsValid)
             {
                 var kandydatId = _loginService.GetUserId();
-                var kandydat = await _context.Kandydaci.FindAsync(kandydatId);
+                var kandydat = _context.Kandydaci.Find(kandydatId);
                 if (kandydat == null)
                 {
                     return NotFound();
@@ -139,7 +136,7 @@ namespace PWRekruter.Controllers
                 kandydat.NumerMieszkania = kandydatView.NumerMieszkania;
 
                 _context.Update(kandydat);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
             }

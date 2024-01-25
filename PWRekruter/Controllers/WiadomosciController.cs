@@ -26,7 +26,7 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Wiadomosci
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var userId = _loginService.GetUserId();
             // wiadomosci do obecnego uzytkownika
@@ -34,22 +34,22 @@ namespace PWRekruter.Controllers
                 .Include(w => w.Wiadomosc.Nadawca)
                 .Where(ow => ow.OdbiorcaId == userId)
                 .Select(w => w.Wiadomosc)
-                .ToListAsync();
+                .ToList();
 
-            return View(await wiadomosci);
+            return View(wiadomosci);
         }
 
         // GET: Wiadomosci/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var wiadomosc = await _context.Wiadomosci
+            var wiadomosc = _context.Wiadomosci
                 .Include(w => w.Nadawca)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefault(w => w.Id == id);
 
             if (wiadomosc == null)
             {
@@ -60,7 +60,7 @@ namespace PWRekruter.Controllers
         }
 
         // GET: Wiadomosci/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             var userType = _loginService.GetUserType();
             if (userType == UserType.Kandydat)
@@ -71,22 +71,22 @@ namespace PWRekruter.Controllers
 
             ViewBag.UserType = "Rekruter";
 
-			var wydzialy = await _context.Wydzialy.ToListAsync();
+			var wydzialy = _context.Wydzialy.ToList();
 			ViewBag.Wydzialy = wydzialy;
 
-            var kierunki = await _context.Kierunki.ToListAsync();
+            var kierunki = _context.Kierunki.ToList();
             ViewBag.Kierunki = kierunki;
 
 			return View();
         }
 
-        private async Task<List<int>> GetIdOdbiorcyWiadomosciList(WiadomoscViewModel wiadomoscViewModel)
+        private List<int> GetIdOdbiorcyWiadomosciList(WiadomoscViewModel wiadomoscViewModel)
         {
             // user==Kandydat => mail do pierwszego rekrutera
             var userType = _loginService.GetUserType();
             if (userType == UserType.Kandydat)
             {
-                var rekruterId = await _context.Rekruterzy.Select(r=>r.Id).FirstOrDefaultAsync();
+                var rekruterId = _context.Rekruterzy.Select(r=>r.Id).FirstOrDefault();
                 return new List<int> { rekruterId };
             }
 
@@ -103,7 +103,7 @@ namespace PWRekruter.Controllers
 
             // TODO brakuje weryfikacji czy zakwalifikowany ale nie wiem czy bedziemy to implementowac
             // https://media.tenor.com/vkYnJE2Jdj8AAAAM/oh-my-god.gif
-            var ids = await _context.Preferencje
+            var ids = _context.Preferencje
                 .Include(p => p.Aplikacja)
                     .ThenInclude(a => a.Kandydat)
                 .Include(p => p.Kierunek)
@@ -115,7 +115,7 @@ namespace PWRekruter.Controllers
                     && (string.IsNullOrEmpty(wiadomoscViewModel.Nazwisko) || p.Aplikacja.Kandydat.Nazwisko == wiadomoscViewModel.Nazwisko))
                 .Select(p => p.Aplikacja.Kandydat.Id)
                 .Distinct()
-                .ToListAsync();
+                .ToList();
 
             return ids;
         }
@@ -125,22 +125,22 @@ namespace PWRekruter.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Kierunek,Wydzial,Imie,Nazwisko,Maile,Zakwalifikowani,Tytul,Tresc")] WiadomoscViewModel wiadomoscView)
+        public IActionResult Create([Bind("Kierunek,Wydzial,Imie,Nazwisko,Maile,Zakwalifikowani,Tytul,Tresc")] WiadomoscViewModel wiadomoscView)
         {
             if (!ModelState.IsValid)
             {
                 return View(wiadomoscView);
             }
 
-            List<int> idOdbiorcow = await GetIdOdbiorcyWiadomosciList(wiadomoscView);
+            List<int> idOdbiorcow = GetIdOdbiorcyWiadomosciList(wiadomoscView);
 
             if (idOdbiorcow.Count == 0)
             {
                 ViewBag.BrakKandydatow = true;
                 ViewBag.UserType = "Rekruter";
 
-                var wydzialy = await _context.Wydzialy.ToListAsync();
-                var kierunki = await _context.Kierunki.ToListAsync();
+                var wydzialy = _context.Wydzialy.ToList();
+                var kierunki = _context.Kierunki.ToList();
                 ViewBag.Wydzialy = wydzialy;
                 ViewBag.Kierunki = kierunki;
 
@@ -168,7 +168,7 @@ namespace PWRekruter.Controllers
             }
             _context.Add(wiadomosc);
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }
