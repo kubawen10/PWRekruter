@@ -26,7 +26,7 @@ namespace PWRekruter.Data
         public DbSet<ProgPunktowy> ProgiPunktowe {  get; set; }
         public virtual DbSet<Aplikacja> Aplikacje { get; set; }
         public virtual DbSet<Preferencja> Preferencje { get; set; }
-        public DbSet<TuraRekrutacji> TuryRekrutacji { get; set; }
+        public virtual DbSet<TuraRekrutacji> TuryRekrutacji { get; set; }
         public DbSet<Dokument> Dokumenty { get; set; }
         public DbSet<Specjalizacja> Specjalizacje { get; set; }        
         protected override void OnModelCreating(ModelBuilder modelBuilder)

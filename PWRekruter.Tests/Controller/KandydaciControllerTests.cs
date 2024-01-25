@@ -98,7 +98,6 @@ namespace PWRekruter.Tests.Controller
             var context = new Mock<PWRekruterDbContext>(optionsBuilder.Options);
             var loginService = new Mock<ILoginService>();
             var controller = new KandydaciController(context.Object, loginService.Object);
-            long existingApp = 1L;
             var aplikacja = new Aplikacja
             {
                 Id = 1L,
@@ -108,11 +107,22 @@ namespace PWRekruter.Tests.Controller
                 Status = StatusAplikacji.Zlozona,
                 IdTuryRekrutacji = 1
             };
-            var mockSet = new Mock<DbSet<Aplikacja>>();
-            context.Setup(m => m.Aplikacje).Returns(mockSet.Object);
-            mockSet.Setup(m => m.Find(existingApp)).Returns(aplikacja);
-            
-            var result = controller.DeleteApplication(existingApp);
+            var tura = new TuraRekrutacji
+            {
+                Id = 1,
+                TerminSkladaniaAplikacji = DateTime.Today.AddDays(1),
+                TerminWnoszeniaOplatRekrutacyjnych = DateTime.Today.AddDays(1),
+            };
+            var applicationMockSet = new Mock<DbSet<Aplikacja>>();
+            var recrutationTurnMockSet = new Mock<DbSet<TuraRekrutacji>>();
+
+            context.Setup(m => m.Aplikacje).Returns(applicationMockSet.Object);
+            applicationMockSet.Setup(m => m.Find(aplikacja.Id)).Returns(aplikacja);
+
+            context.Setup(m => m.TuryRekrutacji).Returns(recrutationTurnMockSet.Object);
+            recrutationTurnMockSet.Setup(m => m.Find(tura.Id)).Returns(tura);
+
+            var result = controller.DeleteApplication(aplikacja.Id);
 
             context.Verify(m => m.Aplikacje.Remove(aplikacja), Times.Once);
             context.Verify(m => m.SaveChanges(), Times.Once);
