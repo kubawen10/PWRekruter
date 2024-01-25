@@ -99,6 +99,7 @@ namespace PWRekruter.Controllers
             var kierunek = _context.Kierunki
                 .Include(k => k.HistoryczneProgi)
                 .FirstOrDefault(m => m.Id == id);
+
             if (kierunek == null)
             {
                 return NotFound();

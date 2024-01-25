@@ -116,6 +116,10 @@ namespace PWRekruter.Controllers
                     return Content("Zapisano zmiany");
                 }
             }
+            else
+            {
+                NotFound();
+            }
             
             return RedirectToAction("Details");
         }

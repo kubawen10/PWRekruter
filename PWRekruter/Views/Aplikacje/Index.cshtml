@@ -69,7 +69,7 @@ else
                 @Html.DisplayFor(modelItem => item.Kandydat.Nazwisko)
             </td>
            <td>
-               @Html.DisplayNameFor(modelItem => item.Status): @Html.DisplayFor(modelItem => item.Status)
+               @Html.DisplayNameFor(modelItem => item.Status): @item.Status.GetEnumLabel()
            </td>
            <td>
                <a asp-action="Details" class="button" asp-route-id="@item.Id">Przeglądaj</a>
